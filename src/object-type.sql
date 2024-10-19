@@ -1,69 +1,71 @@
 CREATE OR REPLACE FUNCTION
-	rule_0.object_type(
-		object_schema NAME,
-		object_name   NAME DEFAULT NULL
-	)
-RETURNS text
-AS $$
+	rule_0.object_type(sch NAME, obj NAME DEFAULT NULL)
+RETURNS
+	TEXT
+LANGUAGE
+	PLPGSQL
+AS
+$$
 
-WITH
+DECLARE
+	ret TEXT;
 
-args AS (
-	SELECT CASE object_name
-		WHEN NULL THEN rule_0.find_in_path(object_schema)
-		ELSE
-			(
-				object_schema,
-				object_name,
-				object_schema || '.' || object_name
-			)::rule_0.qualified_name
-		END CASE
-),
+BEGIN
 
-types AS (
-	SELECT *
-	FROM (
+	IF obj IS NULL
+	THEN
+		obj := sch;
+		sch := (rule_0.find_in_path(obj)).schema_name;
+	END IF;
+
+	WITH
+	the_reltypes(relkind, relation_type) AS (
 		VALUES
-			('r'::CHAR, 'Table'),
-			('i'::CHAR, 'Index'),
-			('s'::CHAR, 'Sequence'),
-			('v'::CHAR, 'View'),
-			('c'::CHAR, 'Composite Type'),
-			('t'::CHAR, 'Toast Table'),
-			('m'::CHAR, 'Materialized View'),
-			('f'::CHAR, 'Foreign Table')
-	)
-	AS tbl (relkind, object_type)
-),
+			('i'::"char", 'Index'),
+			('S'::"char", 'Sequence'),
+			('t'::"char", 'Toast Table'),
+			('v'::"char", 'View'),
+			('m'::"char", 'Materialized View'),
+			('c'::"char", 'Composite Type'),
+			('f'::"char", 'Foreign Table'),
+			('p'::"char", 'Partitioned Table'),
+			('I'::"char", 'Partitioned Index'),
+			('r'::"char", 'Table')
+	),
 
-class_stuff AS (
-	SELECT
-		relname       AS relation,
-		relnamespace  AS oid,
-		relkind::CHAR AS relkind
-	FROM
-		pg_class
-),
+	lookup AS (
+		SELECT
+			nspname       AS schema_name,
+			relname       AS relation_name,
+			relation_type
+		FROM
+			pg_class
+		NATURAL JOIN
+			the_reltypes
+		JOIN
+			pg_namespace nsp
+		ON
+			relnamespace = nsp.oid
+		)
 
-together AS (
-	SELECT
-		nspname AS schema_name,
-		relation,
-		object_type
-	FROM         class_stuff
-	NATURAL JOIN types
-	NATURAL JOIN pg_namespace
-)
+		SELECT relation_type
+		INTO   ret
+		FROM   lookup
+		WHERE  schema_name = sch
+		AND    relation_name = obj
+	;
 
-SELECT * FROM args
+	RETURN ret;
 
-/*
-SELECT object_type
-FROM   together, args
-WHERE  schema_name = schema_name
-AND    relation    = object_name
-*/
+END;
+$$
 ;
 
-$$
-LANGUAGE SQL;
+
+-- Tests:
+SELECT rule_0.object_type('bol_t2');
+SELECT rule_0.object_type('ace_t2_normalize', 'bol_t2');
+SELECT rule_0.object_type('ace_file');
+SELECT rule_0.object_type('privilege_type');
+SELECT rule_0.object_type('ace_file_pkey');
+SELECT rule_0.object_type('cargo_t2', NULL);

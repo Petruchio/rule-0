@@ -1,0 +1,16 @@
+Housekeeping:
+	Move all code in the "public" schema into project-specific schemata.
+
+Features:
+	Get dependency tree for views and materialized views.
+	Rebase a view.
+	Destroy and re-create a view tree.
+	Refresh a materialized view tree in dependency order.
+	View which gives information on partitions.
+
+Fixes:
+	Modify find_in_path() to take either a single argument (the object),
+	or two arguments (the schema and the object).  While it seems
+	pointless to look for something if you already know where it is,
+	this would allow the function to be used to find out if a particular
+	thing exists in a particular place.  A null result means, "no".

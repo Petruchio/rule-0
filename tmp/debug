@@ -1,0 +1,22 @@
+ WITH tbl_names AS (
+         SELECT c.oid,
+            n.nspname AS table_schema,
+            c.relname AS table_name,
+            relkind.relation_type
+           FROM pg_class c
+             JOIN pg_namespace n ON c.relnamespace = n.oid
+             JOIN meta_lookup.relkind USING (relkind)
+        )
+ SELECT relation_type,
+    table_schema AS schema_name,
+    table_name AS relation,
+    pg_total_relation_size(oid::regclass) AS bytes,
+    pg_size_pretty(pg_total_relation_size(oid::regclass)) AS size
+   FROM tbl_names t
+  WHERE table_name = 'srsubstate'
+  ORDER BY table_schema, table_name
+;
+
+SELECT
+    pg_total_relation_size('srsubstate') AS bytes,
+    pg_size_pretty(pg_total_relation_size('srsubstate')) AS size;

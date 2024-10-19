@@ -1,2 +1,0 @@
-DROP   SCHEMA IF EXISTS rule_0 CASCADE;
-CREATE SCHEMA           rule_0;
