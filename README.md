@@ -91,8 +91,8 @@ rule_0=# \dn
 ```
 
 With Rule 0, you perform an actual query on the schemata view.  Here we'll use
-PostgreSQL's TABLE keyword, the little-known (but great) equivalent of SELECT
-* FROM
+PostgreSQL's TABLE keyword, the little-known (but great) equivalent of
+SELECT * FROM
 
 ```
 rule_0=# TABLE meta.schemata;
