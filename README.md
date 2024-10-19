@@ -86,7 +86,8 @@ Using psql, you'd get the list of existing schemata like this:
  security        | ray
  security_lookup | ray
  update          | ray
-(7 rows)```
+(7 rows)
+```
 
 With Rule 0, you perform an actual query on the schemata view.  Here we'll use
 PostgreSQL's TABLE keyword, the little-known (but great) equivalent of SELECT
@@ -137,7 +138,8 @@ description | Lookup tables to resolve codes and IDs in PostgreSQL security data
 schema_id   | 716,096
 schema_name | update
 owner       | ray
-description | Information on the status and dependencies of materialized views.```
+description | Information on the status and dependencies of materialized views.
+```
 
 This is not unlike what you'd see in information_schema.schemata, though it
 actually shows you the documentation on the schemata.
@@ -149,7 +151,8 @@ a table took up.  Normally you'd say this:
  pg_relation_size
 ------------------
            49,152
-(1 row)```
+(1 row)
+```
 
 Or if you want something a little easier to read:
 
@@ -157,7 +160,8 @@ Or if you want something a little easier to read:
  pg_size_pretty
 ----------------
  48kB
-(1 row)```
+(1 row)
+```
 
 With Rule 0, you can say:
 
@@ -165,7 +169,8 @@ With Rule 0, you can say:
  relation_type | schema_name |  relation  | bytes  | size
 ---------------+-------------+------------+--------+-------
  Table         | meta_lookup | srsubstate | 49,152 | 48 kB
-(1 row)```
+(1 row)
+```
 
 
 ### Metadata Metadata
@@ -190,7 +195,8 @@ in the meta_lookup and security_lookup schemata.  For instance:
  p       | Partitioned Table
  I       | Partitioned Index
  r       | Table
-(10 rows)```
+(10 rows)
+```
 
 There are presently almost 40 tables full of this stuff.  Because you
 know... this is *data*.  PostgreSQL is a database.  It's nice having
@@ -210,7 +216,8 @@ search path.  That looks like this:
    search_path
 -----------------
  "$user", public
-(1 row)```
+(1 row)
+```
 
 The information is *sort of* presented as a table.  But it isn't really useful
 as a table; you can't use the result as part of another query, for instance.
@@ -224,7 +231,8 @@ Using Rule 0, you could say this:
 ------------+-------------
           1 | "$user"
           2 | public
-(2 rows)```
+(2 rows)
+```
 
 Here we're peforming an actual query.  That allows us to use our standard SQL
 tricks on this:
@@ -233,22 +241,26 @@ tricks on this:
  ordinality | schema_name
 ------------+-------------
           2 | public
-(1 row)```
+(1 row)
+```
 
 Suppose you wanted to add 'meta' to your search path. Ordinarily use SET:
 
 ```rule_0=# SET search_path TO "$user", public, meta;
-SET```
+SET
+```
 
 The trouble there is that you need to give the full search path; what you had
 before, and 'meta' as well.  There is a way around that:
 
-```SELECT set_config('search_path', current_setting('search_path') || ', meta', false);```
+```SELECT set_config('search_path', current_setting('search_path') || ', meta', false);
+```
 
 The Rule 0 solution is a bit easier to remember:
 
 ```rule_0=# INSERT INTO meta.search_path (schema_name) VALUES ('meta');
-INSERT 0 0```
+INSERT 0 0
+```
 
 (Note that the number of lines inserted is wrong.  Fixing that is on the
 agenda.)
@@ -259,13 +271,15 @@ aren't just seen in Rule 0), we see:
 ```rule_0=# SHOW search_path;
       search_path
 -----------------------
- "$user", public, meta```
+ "$user", public, meta
+ ```
 
 Okay, that worked.  But what did we gain by all that?
 
 Well, suppose we want to search *all* of our schemata.  We could say this:
 
-```INSERT INTO meta.search_path (schema_name) SELECT schema_name FROM meta.schemata;```
+```INSERT INTO meta.search_path (schema_name) SELECT schema_name FROM meta.schemata;
+```
 
 Here we pull the schemata names from another Rule 0 view, meta.schemata, and
 add them all to our search path.  Here we'll use meta.search_path itself to check
@@ -285,7 +299,8 @@ the result, because the search_path variable is getting annoyingly long:
           9 | security
          10 | security_lookup
          11 | update
-(11 rows)```
+(11 rows)
+```
 
 That was a lot faster, and less annoying, than doing it by hand.  Note that we
 don't get duplicate entries; meta.search_path understands that the list must be
@@ -337,7 +352,8 @@ For instance, in psql you'd look at your users this way:
  postgres         | Superuser, Create role, Create DB, Replication, Bypass RLS
  ray              | Superuser
  universal_reader | Cannot login
- will             |```
+ will             |
+ ```
 
 With Rule 0, you can say:
 
@@ -348,7 +364,8 @@ With Rule 0, you can say:
   16,384 | ray       | ******** | ∅               |                ∅
   16,420 | alex      | ******** | ∅               |                ∅
  644,781 | will      | ******** | ∅               |                ∅
-(4 rows)```
+(4 rows)
+```
 
 Note that universal_reader does not appear in security.users; that's because it
 doesn't regard a role which cannot log in as a user. It does appear in the
@@ -375,7 +392,8 @@ roles view, however:
   16,384 | ray                         | t
   16,420 | alex                        | t
  644,730 | universal_reader            | t
-(22 rows)```
+(22 rows)
+```
 
 ## Domains
 
