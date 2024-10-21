@@ -1,22 +1,21 @@
-SCHEMATA="(rule_0|security|security_lookup|meta|meta_lookup|update|public)"
+SCHEMATA = rule_0 security security_lookup meta meta_lookup update
+TARGETS  = "rule_0|security|security_lookup|meta|meta_lookup|update"
 SQL=dump/rule-0.sql
 VER="0.1"
 
-.PHONY: dump install help
+.PHONY: dump dump-each install help
 
 help:
-	@echo "*********************************************************************"
-	@echo "*                     Rule 0 for PostgreSQL                         *"
-	@echo "*      This will install Rule 0 (v.$(VER)) to a PostgreSQL database.   *"
-	@echo "*********************************************************************"
-	@echo "To install:"
-	@echo "             make db=<database> install"
-	@echo "You must specify the database to which you wish to install."
-	@echo "For safety, the default database is not assumed."
+	@ cat doc/usage
 
 dump:
+	pg_dump -d rule_0 --schema=$(TARGETS) > ./dump/rule-0.sql
+
+dump-each:
 	@ echo "Dumping Rule 0 entities to $(SQL)"
-	@ pg_dump --no-owner --schema=$(SCHEMATA) > $(SQL)
+	for name in $(SCHEMATA); do \
+		./bin/dump-schema -s $$name -d rule_0 > ./dump/$$name.sql; \
+	done
 	@ echo "Done."
 
 install:

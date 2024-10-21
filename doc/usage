@@ -1,0 +1,8 @@
+*********************************************************************
+*                     Rule 0 for PostgreSQL                         *
+*      This will install Rule 0 (v0.1) to a PostgreSQL database.   *
+*********************************************************************
+To install:
+             make db=<database> install
+You must specify the database to which you wish to install.
+For safety, the default database is not assumed.

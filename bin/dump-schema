@@ -1,0 +1,51 @@
+#!/bin/sh
+
+CMD="pg_dump --no-owner"
+
+usage() {
+	echo "Usage: $0 --schema|-s <schema name> [--database|-d <database name>]"
+	exit 1
+}
+
+DATABASE=""
+SCHEMA=""
+
+if [ "$#" -ne 2 ] && [ "$#" -ne 4 ]; then
+	usage
+fi
+
+while [ "$#" -gt 0 ]; do
+	case "$1" in
+		--database|-d)
+			if [ -n "$DATABASE" ]; then
+				echo "Error: --database/-d option can only be provided once."
+				exit 1
+			fi
+
+			DATABASE="$2"
+			shift 2
+			;;
+
+		--schema|-s)
+			if [ -n "$SCHEMA" ]; then
+				echo "Error: --schema/-s option can only be provided once."
+				exit 1
+			fi
+				SCHEMA="$2"
+				shift 2
+			;;
+
+	*)
+		usage
+		;;
+	esac
+done
+
+if [ -z "$SCHEMA" ]; then
+	echo "Error: --schema is required."
+	usage
+fi
+
+DUMP_CMD="$CMD --schema=$SCHEMA ${DATABASE:+--dbname=$DATABASE}"
+echo "Dumping $SCHEMA" >&2
+$DUMP_CMD | sed -e 's/^\( \{4\}\)\+/\t/g'
