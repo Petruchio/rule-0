@@ -717,7 +717,7 @@ CREATE FUNCTION rule_0.delete_from_search_path_trigger() RETURNS trigger
 	PERFORM rule_0.delete_from_search_path(
 		OLD.schema_name
 	);
-	RETURN NULL;
+	RETURN OLD;
 	END;
 $$;
 
@@ -2054,7 +2054,7 @@ CREATE FUNCTION rule_0.push_to_search_path_trigger() RETURNS trigger
     AS $$
 	BEGIN
 	PERFORM rule_0.push_to_search_path(NEW.schema_name::NAME);
-	RETURN NULL;
+	RETURN NEW;
 	END;
 $$;
 
@@ -3264,7 +3264,7 @@ CREATE FUNCTION rule_0.update_search_path_trigger() RETURNS trigger
     AS $$
 	BEGIN
 	PERFORM rule_0.update_search_path(OLD.schema_name, NEW.schema_name);
-	RETURN NULL;
+	RETURN NEW;
 	END;
 $$;
 
