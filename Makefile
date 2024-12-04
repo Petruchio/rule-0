@@ -3,13 +3,13 @@ TARGETS  = "rule_0|security|security_lookup|meta|meta_lookup|update"
 SQL=dump/rule-0.sql
 VER="0.1"
 
-.PHONY: dump dump-each install help
+.PHONY: dump dump-each install help push
 
 help:
 	@ cat doc/usage
 
 dump:
-	pg_dump -d rule_0 --schema=$(TARGETS) > ./dump/rule-0.sql
+	pg_dump --no-owner -d rule_0 --schema=$(TARGETS) > ./dump/rule-0.sql
 
 dump-each:
 	@ echo "Dumping Rule 0 entities to $(SQL)"

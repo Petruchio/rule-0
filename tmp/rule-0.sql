@@ -17,131 +17,153 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: meta; Type: SCHEMA; Schema: -; Owner: -
+-- Name: meta; Type: SCHEMA; Schema: -; Owner: ray
 --
 
 CREATE SCHEMA meta;
 
 
+ALTER SCHEMA meta OWNER TO ray;
+
 --
--- Name: SCHEMA meta; Type: COMMENT; Schema: -; Owner: -
+-- Name: SCHEMA meta; Type: COMMENT; Schema: -; Owner: ray
 --
 
 COMMENT ON SCHEMA meta IS 'PostgreSQL metadata, formatted for human beings.';
 
 
 --
--- Name: meta_lookup; Type: SCHEMA; Schema: -; Owner: -
+-- Name: meta_lookup; Type: SCHEMA; Schema: -; Owner: ray
 --
 
 CREATE SCHEMA meta_lookup;
 
 
+ALTER SCHEMA meta_lookup OWNER TO ray;
+
 --
--- Name: SCHEMA meta_lookup; Type: COMMENT; Schema: -; Owner: -
+-- Name: SCHEMA meta_lookup; Type: COMMENT; Schema: -; Owner: ray
 --
 
 COMMENT ON SCHEMA meta_lookup IS 'Lookup tables to resolve codes and IDs in PostgreSQL metadata.';
 
 
 --
--- Name: rule_0; Type: SCHEMA; Schema: -; Owner: -
+-- Name: rule_0; Type: SCHEMA; Schema: -; Owner: ray
 --
 
 CREATE SCHEMA rule_0;
 
 
+ALTER SCHEMA rule_0 OWNER TO ray;
+
 --
--- Name: SCHEMA rule_0; Type: COMMENT; Schema: -; Owner: -
+-- Name: SCHEMA rule_0; Type: COMMENT; Schema: -; Owner: ray
 --
 
 COMMENT ON SCHEMA rule_0 IS 'Entities related to the Rule 0 project for controlling PostgreSQL relationally.';
 
 
 --
--- Name: security; Type: SCHEMA; Schema: -; Owner: -
+-- Name: security; Type: SCHEMA; Schema: -; Owner: ray
 --
 
 CREATE SCHEMA security;
 
 
+ALTER SCHEMA security OWNER TO ray;
+
 --
--- Name: SCHEMA security; Type: COMMENT; Schema: -; Owner: -
+-- Name: SCHEMA security; Type: COMMENT; Schema: -; Owner: ray
 --
 
 COMMENT ON SCHEMA security IS 'PostgreSQL security information.';
 
 
 --
--- Name: security_lookup; Type: SCHEMA; Schema: -; Owner: -
+-- Name: security_lookup; Type: SCHEMA; Schema: -; Owner: ray
 --
 
 CREATE SCHEMA security_lookup;
 
 
+ALTER SCHEMA security_lookup OWNER TO ray;
+
 --
--- Name: SCHEMA security_lookup; Type: COMMENT; Schema: -; Owner: -
+-- Name: SCHEMA security_lookup; Type: COMMENT; Schema: -; Owner: ray
 --
 
 COMMENT ON SCHEMA security_lookup IS 'Lookup tables to resolve codes and IDs in PostgreSQL security data.';
 
 
 --
--- Name: update; Type: SCHEMA; Schema: -; Owner: -
+-- Name: update; Type: SCHEMA; Schema: -; Owner: ray
 --
 
 CREATE SCHEMA update;
 
 
+ALTER SCHEMA update OWNER TO ray;
+
 --
--- Name: SCHEMA update; Type: COMMENT; Schema: -; Owner: -
+-- Name: SCHEMA update; Type: COMMENT; Schema: -; Owner: ray
 --
 
 COMMENT ON SCHEMA update IS 'Information on the status and dependencies of materialized views.';
 
 
 --
--- Name: big_counting_number; Type: DOMAIN; Schema: rule_0; Owner: -
+-- Name: big_counting_number; Type: DOMAIN; Schema: rule_0; Owner: ray
 --
 
 CREATE DOMAIN rule_0.big_counting_number AS bigint
 	CONSTRAINT big_counting_number_check CHECK ((VALUE > 0));
 
 
+ALTER DOMAIN rule_0.big_counting_number OWNER TO ray;
+
 --
--- Name: big_natural_number; Type: DOMAIN; Schema: rule_0; Owner: -
+-- Name: big_natural_number; Type: DOMAIN; Schema: rule_0; Owner: ray
 --
 
 CREATE DOMAIN rule_0.big_natural_number AS bigint
 	CONSTRAINT big_natural_number_check CHECK ((VALUE >= 0));
 
 
+ALTER DOMAIN rule_0.big_natural_number OWNER TO ray;
+
 --
--- Name: counting_number; Type: DOMAIN; Schema: rule_0; Owner: -
+-- Name: counting_number; Type: DOMAIN; Schema: rule_0; Owner: ray
 --
 
 CREATE DOMAIN rule_0.counting_number AS integer
 	CONSTRAINT counting_number_check CHECK ((VALUE > 0));
 
 
+ALTER DOMAIN rule_0.counting_number OWNER TO ray;
+
 --
--- Name: digit; Type: DOMAIN; Schema: rule_0; Owner: -
+-- Name: digit; Type: DOMAIN; Schema: rule_0; Owner: ray
 --
 
 CREATE DOMAIN rule_0.digit AS smallint
 	CONSTRAINT digit_check CHECK (((VALUE >= 0) AND (VALUE < 10)));
 
 
+ALTER DOMAIN rule_0.digit OWNER TO ray;
+
 --
--- Name: natural_number; Type: DOMAIN; Schema: rule_0; Owner: -
+-- Name: natural_number; Type: DOMAIN; Schema: rule_0; Owner: ray
 --
 
 CREATE DOMAIN rule_0.natural_number AS integer
 	CONSTRAINT natural_number_check CHECK ((VALUE >= 0));
 
 
+ALTER DOMAIN rule_0.natural_number OWNER TO ray;
+
 --
--- Name: qualified_name; Type: TYPE; Schema: rule_0; Owner: -
+-- Name: qualified_name; Type: TYPE; Schema: rule_0; Owner: ray
 --
 
 CREATE TYPE rule_0.qualified_name AS (
@@ -151,24 +173,30 @@ CREATE TYPE rule_0.qualified_name AS (
 );
 
 
+ALTER TYPE rule_0.qualified_name OWNER TO ray;
+
 --
--- Name: small_counting_number; Type: DOMAIN; Schema: rule_0; Owner: -
+-- Name: small_counting_number; Type: DOMAIN; Schema: rule_0; Owner: ray
 --
 
 CREATE DOMAIN rule_0.small_counting_number AS smallint
 	CONSTRAINT small_counting_number_check CHECK ((VALUE > 0));
 
 
+ALTER DOMAIN rule_0.small_counting_number OWNER TO ray;
+
 --
--- Name: small_natural_number; Type: DOMAIN; Schema: rule_0; Owner: -
+-- Name: small_natural_number; Type: DOMAIN; Schema: rule_0; Owner: ray
 --
 
 CREATE DOMAIN rule_0.small_natural_number AS smallint
 	CONSTRAINT small_natural_number_check CHECK ((VALUE >= 0));
 
 
+ALTER DOMAIN rule_0.small_natural_number OWNER TO ray;
+
 --
--- Name: create_view_key(regclass, name, name[]); Type: PROCEDURE; Schema: meta; Owner: -
+-- Name: create_view_key(regclass, name, name[]); Type: PROCEDURE; Schema: meta; Owner: ray
 --
 
 CREATE PROCEDURE meta.create_view_key(IN view_name regclass, IN key_name name, VARIADIC fields name[])
@@ -188,8 +216,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE meta.create_view_key(IN view_name regclass, IN key_name name, VARIADIC fields name[]) OWNER TO ray;
+
 --
--- Name: explain_to_json(text); Type: FUNCTION; Schema: meta; Owner: -
+-- Name: explain_to_json(text); Type: FUNCTION; Schema: meta; Owner: ray
 --
 
 CREATE FUNCTION meta.explain_to_json(query text) RETURNS json
@@ -210,8 +240,10 @@ END
 $$;
 
 
+ALTER FUNCTION meta.explain_to_json(query text) OWNER TO ray;
+
 --
--- Name: field_exists(regclass, name); Type: FUNCTION; Schema: meta; Owner: -
+-- Name: field_exists(regclass, name); Type: FUNCTION; Schema: meta; Owner: ray
 --
 
 CREATE FUNCTION meta.field_exists(relation regclass, field_name name) RETURNS boolean
@@ -224,8 +256,10 @@ CREATE FUNCTION meta.field_exists(relation regclass, field_name name) RETURNS bo
 $$;
 
 
+ALTER FUNCTION meta.field_exists(relation regclass, field_name name) OWNER TO ray;
+
 --
--- Name: field_must_exist(regclass, name); Type: PROCEDURE; Schema: meta; Owner: -
+-- Name: field_must_exist(regclass, name); Type: PROCEDURE; Schema: meta; Owner: ray
 --
 
 CREATE PROCEDURE meta.field_must_exist(IN relation regclass, IN field_name name)
@@ -245,8 +279,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE meta.field_must_exist(IN relation regclass, IN field_name name) OWNER TO ray;
+
 --
--- Name: get_trigger_when_clause(oid); Type: FUNCTION; Schema: meta; Owner: -
+-- Name: get_trigger_when_clause(oid); Type: FUNCTION; Schema: meta; Owner: ray
 --
 
 CREATE FUNCTION meta.get_trigger_when_clause(trigger_id oid) RETURNS text
@@ -271,8 +307,10 @@ CREATE FUNCTION meta.get_trigger_when_clause(trigger_id oid) RETURNS text
 $$;
 
 
+ALTER FUNCTION meta.get_trigger_when_clause(trigger_id oid) OWNER TO ray;
+
 --
--- Name: must_be_a(regclass, text); Type: PROCEDURE; Schema: meta; Owner: -
+-- Name: must_be_a(regclass, text); Type: PROCEDURE; Schema: meta; Owner: ray
 --
 
 CREATE PROCEDURE meta.must_be_a(IN relation regclass, IN target_type text)
@@ -293,8 +331,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE meta.must_be_a(IN relation regclass, IN target_type text) OWNER TO ray;
+
 --
--- Name: relation_type(regclass); Type: FUNCTION; Schema: meta; Owner: -
+-- Name: relation_type(regclass); Type: FUNCTION; Schema: meta; Owner: ray
 --
 
 CREATE FUNCTION meta.relation_type(relation regclass) RETURNS text
@@ -311,8 +351,10 @@ CREATE FUNCTION meta.relation_type(relation regclass) RETURNS text
 $$;
 
 
+ALTER FUNCTION meta.relation_type(relation regclass) OWNER TO ray;
+
 --
--- Name: truncate_tables(regclass[]); Type: PROCEDURE; Schema: meta; Owner: -
+-- Name: truncate_tables(regclass[]); Type: PROCEDURE; Schema: meta; Owner: ray
 --
 
 CREATE PROCEDURE meta.truncate_tables(VARIADIC tables regclass[])
@@ -328,8 +370,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE meta.truncate_tables(VARIADIC tables regclass[]) OWNER TO ray;
+
 --
--- Name: cast_options(anycompatible); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: cast_options(anycompatible); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.cast_options(datum anycompatible) RETURNS TABLE(type_name name)
@@ -360,8 +404,10 @@ END
 $$;
 
 
+ALTER FUNCTION rule_0.cast_options(datum anycompatible) OWNER TO ray;
+
 --
--- Name: clean_name(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: clean_name(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.clean_name(the_name text) RETURNS text
@@ -387,8 +433,10 @@ CREATE FUNCTION rule_0.clean_name(the_name text) RETURNS text
 $_$;
 
 
+ALTER FUNCTION rule_0.clean_name(the_name text) OWNER TO ray;
+
 --
--- Name: clean_whitespace(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: clean_whitespace(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.clean_whitespace(the_text text) RETURNS text
@@ -406,8 +454,10 @@ CREATE FUNCTION rule_0.clean_whitespace(the_text text) RETURNS text
 $$;
 
 
+ALTER FUNCTION rule_0.clean_whitespace(the_text text) OWNER TO ray;
+
 --
--- Name: column_cast_options(name, name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: column_cast_options(name, name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.column_cast_options(schema_name name, relation_name name, column_name name DEFAULT NULL::name) RETURNS TABLE(type_name name)
@@ -485,8 +535,10 @@ END
 $_$;
 
 
+ALTER FUNCTION rule_0.column_cast_options(schema_name name, relation_name name, column_name name) OWNER TO ray;
+
 --
--- Name: copy_by_key(regclass, regclass, name); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: copy_by_key(regclass, regclass, name); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.copy_by_key(IN source_relation regclass, IN target_table regclass, IN key_field name)
@@ -518,8 +570,10 @@ END
 $_$;
 
 
+ALTER PROCEDURE rule_0.copy_by_key(IN source_relation regclass, IN target_table regclass, IN key_field name) OWNER TO ray;
+
 --
--- Name: copy_to_csv(regclass); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: copy_to_csv(regclass); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.copy_to_csv(IN relation regclass)
@@ -558,8 +612,10 @@ END
 $$;
 
 
+ALTER PROCEDURE rule_0.copy_to_csv(IN relation regclass) OWNER TO ray;
+
 --
--- Name: copy_view(regclass, text); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: copy_view(regclass, text); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.copy_view(IN view_name regclass, IN new_name text)
@@ -594,8 +650,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE rule_0.copy_view(IN view_name regclass, IN new_name text) OWNER TO ray;
+
 --
--- Name: create_materialized_view_schema_from_view_schema(name, name); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: create_materialized_view_schema_from_view_schema(name, name); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.create_materialized_view_schema_from_view_schema(IN source_schema name, IN destination_schema name DEFAULT NULL::name)
@@ -672,8 +730,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE rule_0.create_materialized_view_schema_from_view_schema(IN source_schema name, IN destination_schema name) OWNER TO ray;
+
 --
--- Name: delete_from_search_path(name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: delete_from_search_path(name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.delete_from_search_path(doomed_schema name) RETURNS text
@@ -706,8 +766,10 @@ CREATE FUNCTION rule_0.delete_from_search_path(doomed_schema name) RETURNS text
 $$;
 
 
+ALTER FUNCTION rule_0.delete_from_search_path(doomed_schema name) OWNER TO ray;
+
 --
--- Name: delete_from_search_path_trigger(); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: delete_from_search_path_trigger(); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.delete_from_search_path_trigger() RETURNS trigger
@@ -722,8 +784,10 @@ CREATE FUNCTION rule_0.delete_from_search_path_trigger() RETURNS trigger
 $$;
 
 
+ALTER FUNCTION rule_0.delete_from_search_path_trigger() OWNER TO ray;
+
 --
--- Name: dupview(text, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: dupview(text, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.dupview(oldname text, newname text) RETURNS bigint
@@ -757,8 +821,10 @@ end;
 $$;
 
 
+ALTER FUNCTION rule_0.dupview(oldname text, newname text) OWNER TO ray;
+
 --
--- Name: exec(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: exec(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.exec(query text) RETURNS SETOF record
@@ -770,8 +836,10 @@ END
 $_$;
 
 
+ALTER FUNCTION rule_0.exec(query text) OWNER TO ray;
+
 --
--- Name: explain(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: explain(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.explain(query text) RETURNS text
@@ -805,8 +873,10 @@ END
 $$;
 
 
+ALTER FUNCTION rule_0.explain(query text) OWNER TO ray;
+
 --
--- Name: explain_as_table(jsonb, integer); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: explain_as_table(jsonb, integer); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.explain_as_table(json_explain jsonb, parent_id_arg integer DEFAULT NULL::integer) RETURNS TABLE(node_id integer, parent_id integer, node_type text, parent_relationship text, parallel_aware boolean, async_capable boolean, join_type text, startup_cost double precision, total_cost double precision, plan_rows integer, plan_width integer, inner_unique boolean, hash_cond text, subplan_name text)
@@ -848,8 +918,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.explain_as_table(json_explain jsonb, parent_id_arg integer) OWNER TO ray;
+
 --
--- Name: explain_as_table(text, json, integer); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: explain_as_table(text, json, integer); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.explain_as_table(query text, json_explain json DEFAULT NULL::json, parent_id_arg integer DEFAULT NULL::integer) RETURNS TABLE(node_id integer, parent_id integer, node_type text, parent_relationship text, parallel_aware boolean, async_capable boolean, join_type text, startup_cost double precision, total_cost double precision, plan_rows integer, plan_width integer, inner_unique boolean, hash_cond text, subplan_name text)
@@ -896,8 +968,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.explain_as_table(query text, json_explain json, parent_id_arg integer) OWNER TO ray;
+
 --
--- Name: explain_to_json(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: explain_to_json(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.explain_to_json(query text) RETURNS json
@@ -918,8 +992,10 @@ END
 $$;
 
 
+ALTER FUNCTION rule_0.explain_to_json(query text) OWNER TO ray;
+
 --
--- Name: explain_view(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: explain_view(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.explain_view(view_name text) RETURNS text
@@ -947,8 +1023,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.explain_view(view_name text) OWNER TO ray;
+
 --
--- Name: find_candidate_type(anycompatible); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: find_candidate_type(anycompatible); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.find_candidate_type(datum anycompatible) RETURNS name[]
@@ -988,8 +1066,10 @@ END
 $$;
 
 
+ALTER FUNCTION rule_0.find_candidate_type(datum anycompatible) OWNER TO ray;
+
 --
--- Name: find_free_name(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: find_free_name(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.find_free_name(input_name text) RETURNS name
@@ -1038,8 +1118,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.find_free_name(input_name text) OWNER TO ray;
+
 --
--- Name: find_free_temp_table_name(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: find_free_temp_table_name(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.find_free_temp_table_name(input_name text) RETURNS name
@@ -1085,8 +1167,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.find_free_temp_table_name(input_name text) OWNER TO ray;
+
 --
--- Name: find_in_path(name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: find_in_path(name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.find_in_path(input_schema name, input_name name DEFAULT NULL::name) RETURNS rule_0.qualified_name
@@ -1161,8 +1245,10 @@ AND (
 $$;
 
 
+ALTER FUNCTION rule_0.find_in_path(input_schema name, input_name name) OWNER TO ray;
+
 --
--- Name: generate_record_views(); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: generate_record_views(); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.generate_record_views()
@@ -1197,8 +1283,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE rule_0.generate_record_views() OWNER TO ray;
+
 --
--- Name: generate_soft_casts(); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: generate_soft_casts(); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.generate_soft_casts()
@@ -1268,8 +1356,10 @@ END
 $_$;
 
 
+ALTER PROCEDURE rule_0.generate_soft_casts() OWNER TO ray;
+
 --
--- Name: get_ancestor_materialized_views(rule_0.qualified_name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_ancestor_materialized_views(rule_0.qualified_name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_ancestor_materialized_views(schema_name rule_0.qualified_name) RETURNS TABLE(source_schema name, source_materialized_view name)
@@ -1288,8 +1378,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.get_ancestor_materialized_views(schema_name rule_0.qualified_name) OWNER TO ray;
+
 --
--- Name: get_ancestor_materialized_views(name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_ancestor_materialized_views(name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_ancestor_materialized_views(schema_name name, relation_name name DEFAULT NULL::name) RETURNS TABLE(source_schema_name name, source_materialized_view name)
@@ -1311,8 +1403,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.get_ancestor_materialized_views(schema_name name, relation_name name) OWNER TO ray;
+
 --
--- Name: get_ancestor_relations(rule_0.qualified_name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_ancestor_relations(rule_0.qualified_name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_ancestor_relations(schema_name rule_0.qualified_name) RETURNS TABLE(source_schema name, source_relation name, source_relation_type text)
@@ -1331,8 +1425,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.get_ancestor_relations(schema_name rule_0.qualified_name) OWNER TO ray;
+
 --
--- Name: get_ancestor_relations(name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_ancestor_relations(name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_ancestor_relations(schema_name name, relation_name name DEFAULT NULL::name) RETURNS TABLE(source_schema name, source_relation name, source_relation_type text)
@@ -1373,8 +1469,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.get_ancestor_relations(schema_name name, relation_name name) OWNER TO ray;
+
 --
--- Name: get_composite_object_fields(anyelement); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_composite_object_fields(anyelement); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_composite_object_fields(object anyelement) RETURNS TABLE(field name)
@@ -1387,8 +1485,10 @@ CREATE FUNCTION rule_0.get_composite_object_fields(object anyelement) RETURNS TA
 $$;
 
 
+ALTER FUNCTION rule_0.get_composite_object_fields(object anyelement) OWNER TO ray;
+
 --
--- Name: get_composite_object_fields(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_composite_object_fields(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_composite_object_fields(oname text) RETURNS TABLE(field name)
@@ -1401,8 +1501,10 @@ CREATE FUNCTION rule_0.get_composite_object_fields(oname text) RETURNS TABLE(fie
 $$;
 
 
+ALTER FUNCTION rule_0.get_composite_object_fields(oname text) OWNER TO ray;
+
 --
--- Name: get_composite_type_fields(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_composite_type_fields(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_composite_type_fields(tname text) RETURNS TABLE(field name)
@@ -1424,8 +1526,10 @@ CREATE FUNCTION rule_0.get_composite_type_fields(tname text) RETURNS TABLE(field
 $$;
 
 
+ALTER FUNCTION rule_0.get_composite_type_fields(tname text) OWNER TO ray;
+
 --
--- Name: get_qualified_name(name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_qualified_name(name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_qualified_name(object_schema name, object_name name DEFAULT NULL::name) RETURNS rule_0.qualified_name
@@ -1475,8 +1579,10 @@ CREATE FUNCTION rule_0.get_qualified_name(object_schema name, object_name name D
 $_$;
 
 
+ALTER FUNCTION rule_0.get_qualified_name(object_schema name, object_name name) OWNER TO ray;
+
 --
--- Name: get_relation(regclass); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_relation(regclass); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_relation(rel regclass) RETURNS name
@@ -1497,8 +1603,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.get_relation(rel regclass) OWNER TO ray;
+
 --
--- Name: get_schema(regclass); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_schema(regclass); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_schema(tbl regclass) RETURNS text
@@ -1519,120 +1627,23 @@ END;
 $$;
 
 
---
--- Name: get_schema(regcollation); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regcollation) RETURNS regnamespace
-    LANGUAGE sql
-    AS $_$
-	SELECT collnamespace::REGNAMESPACE FROM pg_collation WHERE oid = $1;
-$_$;
-
+ALTER FUNCTION rule_0.get_schema(tbl regclass) OWNER TO ray;
 
 --
--- Name: get_schema(regconfig); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regconfig) RETURNS regnamespace
-    LANGUAGE sql
-    AS $_$
-	SELECT cfgnamespace::REGNAMESPACE FROM pg_ts_config  WHERE oid = $1;
-$_$;
-
-
---
--- Name: get_schema(regdictionary); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regdictionary) RETURNS regnamespace
-    LANGUAGE sql
-    AS $_$
-	SELECT dictnamespace::REGNAMESPACE FROM pg_ts_dict   WHERE oid = $1;
-$_$;
-
-
---
--- Name: get_schema(regnamespace); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regnamespace) RETURNS regnamespace
-    LANGUAGE sql
-    AS $_$
--- Schemata don't belong to schemata?  How to handle this?  I say it's idempotent.
-	SELECT $1;
-$_$;
-
-
---
--- Name: get_schema(regoper); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regoper) RETURNS regnamespace
-    LANGUAGE sql
-    AS $_$
-	SELECT  oprnamespace::REGNAMESPACE FROM pg_operator  WHERE oid = $1;
-$_$;
-
-
---
--- Name: get_schema(regoperator); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regoperator) RETURNS regnamespace
-    LANGUAGE sql
-    AS $_$
-	SELECT  oprnamespace::REGNAMESPACE FROM pg_operator  WHERE oid = $1;
-$_$;
-
-
---
--- Name: get_schema(regproc); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: get_schema(regproc); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.get_schema(regproc) RETURNS regnamespace
     LANGUAGE sql
     AS $_$
-	SELECT  pronamespace::REGNAMESPACE FROM pg_proc      WHERE oid = $1;
+	SELECT pronamespace::REGNAMESPACE FROM pg_proc WHERE oid = $1;
 $_$;
 
 
---
--- Name: get_schema(regprocedure); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regprocedure) RETURNS regnamespace
-    LANGUAGE sql
-    AS $_$
-	SELECT  pronamespace::REGNAMESPACE FROM pg_proc      WHERE oid = $1;
-$_$;
-
+ALTER FUNCTION rule_0.get_schema(regproc) OWNER TO ray;
 
 --
--- Name: get_schema(regrole); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regrole) RETURNS regnamespace
-    LANGUAGE sql
-    AS $$
--- Roles don't belong to schemata.  Consider raising a warning on this.
-	SELECT NULL::REGNAMESPACE;
-$$;
-
-
---
--- Name: get_schema(regtype); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.get_schema(regtype) RETURNS regnamespace
-    LANGUAGE sql
-    AS $_$
-	SELECT  typnamespace::REGNAMESPACE FROM pg_type      WHERE oid = $1;
-$_$;
-
-
---
--- Name: grant_select_on_new_schema(); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: grant_select_on_new_schema(); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.grant_select_on_new_schema() RETURNS event_trigger
@@ -1660,8 +1671,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.grant_select_on_new_schema() OWNER TO ray;
+
 --
--- Name: load_unzipped_text(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: load_unzipped_text(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.load_unzipped_text(zip_filename text) RETURNS void
@@ -1687,8 +1700,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.load_unzipped_text(zip_filename text) OWNER TO ray;
+
 --
--- Name: materialized_view_refresh_sequence(); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: materialized_view_refresh_sequence(); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.materialized_view_refresh_sequence() RETURNS TABLE(ordinality rule_0.counting_number, schema_name name, materialized_view_name name)
@@ -1760,8 +1775,10 @@ SELECT * FROM clean ORDER BY ordinality;
 $$;
 
 
+ALTER FUNCTION rule_0.materialized_view_refresh_sequence() OWNER TO ray;
+
 --
--- Name: materialized_view_refresh_sequence(name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: materialized_view_refresh_sequence(name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.materialized_view_refresh_sequence(schema_name_arg name, mat_view name DEFAULT NULL::name) RETURNS TABLE(ordinality rule_0.counting_number, schema_name name, materialized_view_name name)
@@ -1828,8 +1845,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.materialized_view_refresh_sequence(schema_name_arg name, mat_view name) OWNER TO ray;
+
 --
--- Name: move_view(regclass, text); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: move_view(regclass, text); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.move_view(IN view_name regclass, IN new_name text)
@@ -1843,8 +1862,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE rule_0.move_view(IN view_name regclass, IN new_name text) OWNER TO ray;
+
 --
--- Name: named_field_must_exist_tg(); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: named_field_must_exist_tg(); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.named_field_must_exist_tg() RETURNS trigger
@@ -1857,8 +1878,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.named_field_must_exist_tg() OWNER TO ray;
+
 --
--- Name: object_type(name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: object_type(name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.object_type(sch name, obj name DEFAULT NULL::name) RETURNS text
@@ -1919,8 +1942,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.object_type(sch name, obj name) OWNER TO ray;
+
 --
--- Name: or_default(integer); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: or_default(integer); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.or_default(integer) RETURNS text
@@ -1936,8 +1961,10 @@ END;
 $_$;
 
 
+ALTER FUNCTION rule_0.or_default(integer) OWNER TO ray;
+
 --
--- Name: or_default(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: or_default(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.or_default(str text) RETURNS text
@@ -1953,8 +1980,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.or_default(str text) OWNER TO ray;
+
 --
--- Name: parse_execution_plan(jsonb, rule_0.natural_number); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: parse_execution_plan(jsonb, rule_0.natural_number); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.parse_execution_plan(plan_json jsonb, parent_id rule_0.natural_number DEFAULT 1) RETURNS TABLE(node rule_0.natural_number, parent rule_0.natural_number, node_type text, startup_cost numeric, total_cost numeric)
@@ -2018,8 +2047,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.parse_execution_plan(plan_json jsonb, parent_id rule_0.natural_number) OWNER TO ray;
+
 --
--- Name: push_to_search_path(name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: push_to_search_path(name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.push_to_search_path(schema_name name) RETURNS text
@@ -2045,8 +2076,10 @@ CREATE FUNCTION rule_0.push_to_search_path(schema_name name) RETURNS text
 $$;
 
 
+ALTER FUNCTION rule_0.push_to_search_path(schema_name name) OWNER TO ray;
+
 --
--- Name: push_to_search_path_trigger(); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: push_to_search_path_trigger(); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.push_to_search_path_trigger() RETURNS trigger
@@ -2059,8 +2092,10 @@ CREATE FUNCTION rule_0.push_to_search_path_trigger() RETURNS trigger
 $$;
 
 
+ALTER FUNCTION rule_0.push_to_search_path_trigger() OWNER TO ray;
+
 --
--- Name: qualified_name(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: qualified_name(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.qualified_name(object_name text) RETURNS rule_0.qualified_name
@@ -2108,8 +2143,10 @@ CREATE FUNCTION rule_0.qualified_name(object_name text) RETURNS rule_0.qualified
 $$;
 
 
+ALTER FUNCTION rule_0.qualified_name(object_name text) OWNER TO ray;
+
 --
--- Name: qualified_name(text, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: qualified_name(text, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.qualified_name(object_schema text, object_name text) RETURNS rule_0.qualified_name
@@ -2146,8 +2183,10 @@ CREATE FUNCTION rule_0.qualified_name(object_schema text, object_name text) RETU
 $$;
 
 
+ALTER FUNCTION rule_0.qualified_name(object_schema text, object_name text) OWNER TO ray;
+
 --
--- Name: random_string(); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: random_string(); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.random_string() RETURNS text
@@ -2168,8 +2207,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.random_string() OWNER TO ray;
+
 --
--- Name: refresh_materialized_view_tree(name, name); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: refresh_materialized_view_tree(name, name); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.refresh_materialized_view_tree(IN matsch name, IN matview name DEFAULT NULL::name)
@@ -2216,8 +2257,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE rule_0.refresh_materialized_view_tree(IN matsch name, IN matview name) OWNER TO ray;
+
 --
--- Name: refresh_materialized_views(text); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: refresh_materialized_views(text); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.refresh_materialized_views(IN p_schema text)
@@ -2261,250 +2304,10 @@ END;
 $$;
 
 
---
--- Name: reg_does_not_match_text(regclass, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regclass, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
+ALTER PROCEDURE rule_0.refresh_materialized_views(IN p_schema text) OWNER TO ray;
 
 --
--- Name: reg_does_not_match_text(regcollation, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regcollation, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regconfig, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regconfig, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regdictionary, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regdictionary, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regnamespace, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regnamespace, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regoper, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regoper, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regoperator, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regoperator, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regproc, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regproc, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regprocedure, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regprocedure, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regrole, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regrole, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(regtype, text); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(regtype, text) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $1::TEXT != $2;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regclass); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regclass) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regcollation); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regcollation) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regconfig); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regconfig) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regdictionary); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regdictionary) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regnamespace); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regnamespace) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regoper); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regoper) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regoperator); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regoperator) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regproc); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regproc) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regprocedure); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regprocedure) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regrole); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regrole) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_does_not_match_text(text, regtype); Type: FUNCTION; Schema: rule_0; Owner: -
---
-
-CREATE FUNCTION rule_0.reg_does_not_match_text(text, regtype) RETURNS boolean
-    LANGUAGE sql
-    AS $_$
-	SELECT $2::TEXT != $1;
-$_$;
-
-
---
--- Name: reg_matches_text(regclass, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regclass, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regclass, text) RETURNS boolean
@@ -2514,8 +2317,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regclass, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regclass, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regcollation, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regcollation, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regcollation, text) RETURNS boolean
@@ -2525,8 +2330,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regcollation, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regcollation, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regconfig, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regconfig, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regconfig, text) RETURNS boolean
@@ -2536,8 +2343,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regconfig, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regconfig, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regdictionary, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regdictionary, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regdictionary, text) RETURNS boolean
@@ -2547,8 +2356,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regdictionary, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regdictionary, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regnamespace, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regnamespace, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regnamespace, text) RETURNS boolean
@@ -2558,8 +2369,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regnamespace, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regnamespace, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regoper, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regoper, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regoper, text) RETURNS boolean
@@ -2569,8 +2382,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regoper, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regoper, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regoperator, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regoperator, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regoperator, text) RETURNS boolean
@@ -2580,8 +2395,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regoperator, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regoperator, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regproc, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regproc, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regproc, text) RETURNS boolean
@@ -2591,8 +2408,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regproc, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regproc, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regprocedure, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regprocedure, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regprocedure, text) RETURNS boolean
@@ -2602,8 +2421,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regprocedure, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regprocedure, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regrole, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regrole, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regrole, text) RETURNS boolean
@@ -2613,8 +2434,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regrole, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regrole, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(regtype, text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(regtype, text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(regtype, text) RETURNS boolean
@@ -2624,8 +2447,10 @@ CREATE FUNCTION rule_0.reg_matches_text(regtype, text) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(regtype, text) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regclass); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regclass); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regclass) RETURNS boolean
@@ -2635,8 +2460,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regclass) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regclass) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regcollation); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regcollation); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regcollation) RETURNS boolean
@@ -2646,8 +2473,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regcollation) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regcollation) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regconfig); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regconfig); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regconfig) RETURNS boolean
@@ -2657,8 +2486,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regconfig) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regconfig) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regdictionary); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regdictionary); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regdictionary) RETURNS boolean
@@ -2668,8 +2499,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regdictionary) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regdictionary) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regnamespace); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regnamespace); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regnamespace) RETURNS boolean
@@ -2679,8 +2512,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regnamespace) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regnamespace) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regoper); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regoper); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regoper) RETURNS boolean
@@ -2690,8 +2525,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regoper) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regoper) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regoperator); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regoperator); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regoperator) RETURNS boolean
@@ -2701,8 +2538,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regoperator) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regoperator) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regproc); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regproc); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regproc) RETURNS boolean
@@ -2712,8 +2551,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regproc) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regproc) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regprocedure); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regprocedure); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regprocedure) RETURNS boolean
@@ -2723,8 +2564,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regprocedure) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regprocedure) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regrole); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regrole); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regrole) RETURNS boolean
@@ -2734,8 +2577,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regrole) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regrole) OWNER TO ray;
+
 --
--- Name: reg_matches_text(text, regtype); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: reg_matches_text(text, regtype); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.reg_matches_text(text, regtype) RETURNS boolean
@@ -2745,8 +2590,10 @@ CREATE FUNCTION rule_0.reg_matches_text(text, regtype) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.reg_matches_text(text, regtype) OWNER TO ray;
+
 --
--- Name: regexp_delete(text, text[]); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: regexp_delete(text, text[]); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.regexp_delete(base_string text, VARIADIC patterns text[]) RETURNS text
@@ -2772,8 +2619,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.regexp_delete(base_string text, VARIADIC patterns text[]) OWNER TO ray;
+
 --
--- Name: restart_column_sequence(regclass, name); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: restart_column_sequence(regclass, name); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.restart_column_sequence(IN tblname regclass, IN colname name)
@@ -2814,8 +2663,10 @@ END
 $$;
 
 
+ALTER PROCEDURE rule_0.restart_column_sequence(IN tblname regclass, IN colname name) OWNER TO ray;
+
 --
--- Name: safe_cast(anycompatible, anyelement); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: safe_cast(anycompatible, anyelement); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.safe_cast(ival anycompatible, dval anyelement) RETURNS anyelement
@@ -2837,8 +2688,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.safe_cast(ival anycompatible, dval anyelement) OWNER TO ray;
+
 --
--- Name: save_search_path(); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: save_search_path(); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.save_search_path()
@@ -2866,8 +2719,10 @@ CREATE PROCEDURE rule_0.save_search_path()
 $$;
 
 
+ALTER PROCEDURE rule_0.save_search_path() OWNER TO ray;
+
 --
--- Name: sed(text, text, text, text[]); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: sed(text, text, text, text[]); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.sed(base_string text, pattern text, replacement text, VARIADIC patterns_and_replacements text[]) RETURNS text
@@ -2898,8 +2753,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.sed(base_string text, pattern text, replacement text, VARIADIC patterns_and_replacements text[]) OWNER TO ray;
+
 --
--- Name: system_exec(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: system_exec(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.system_exec(command text) RETURNS TABLE(result text)
@@ -2944,8 +2801,10 @@ END
 $$;
 
 
+ALTER FUNCTION rule_0.system_exec(command text) OWNER TO ray;
+
 --
--- Name: table_cast_options(regnamespace, regclass); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: table_cast_options(regnamespace, regclass); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.table_cast_options(schema_name regnamespace, tbl_name regclass) RETURNS TABLE(column_name name, type_name regtype)
@@ -2984,8 +2843,10 @@ ORDER BY
 $$;
 
 
+ALTER FUNCTION rule_0.table_cast_options(schema_name regnamespace, tbl_name regclass) OWNER TO ray;
+
 --
--- Name: tco(regnamespace, regclass); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: tco(regnamespace, regclass); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.tco(schema_name regnamespace, tbl_name regclass) RETURNS TABLE(column_name name, type_name regtype)
@@ -3024,8 +2885,10 @@ ORDER BY
 $$;
 
 
+ALTER FUNCTION rule_0.tco(schema_name regnamespace, tbl_name regclass) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regclass); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regclass); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regclass) RETURNS boolean
@@ -3035,8 +2898,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regclass) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regclass) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regcollation); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regcollation); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regcollation) RETURNS boolean
@@ -3046,8 +2911,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regcollation) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regcollation) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regconfig); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regconfig); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regconfig) RETURNS boolean
@@ -3057,8 +2924,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regconfig) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regconfig) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regdictionary); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regdictionary); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regdictionary) RETURNS boolean
@@ -3068,8 +2937,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regdictionary) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regdictionary) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regnamespace); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regnamespace); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regnamespace) RETURNS boolean
@@ -3079,8 +2950,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regnamespace) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regnamespace) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regoper); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regoper); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regoper) RETURNS boolean
@@ -3090,8 +2963,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regoper) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regoper) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regoperator); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regoperator); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regoperator) RETURNS boolean
@@ -3101,8 +2976,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regoperator) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regoperator) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regproc); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regproc); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regproc) RETURNS boolean
@@ -3112,8 +2989,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regproc) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regproc) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regprocedure); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regprocedure); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regprocedure) RETURNS boolean
@@ -3123,8 +3002,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regprocedure) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regprocedure) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regrole); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regrole); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regrole) RETURNS boolean
@@ -3134,8 +3015,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regrole) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regrole) OWNER TO ray;
+
 --
--- Name: text_matches_reg(text, regtype); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: text_matches_reg(text, regtype); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.text_matches_reg(text, regtype) RETURNS boolean
@@ -3145,8 +3028,10 @@ CREATE FUNCTION rule_0.text_matches_reg(text, regtype) RETURNS boolean
 $_$;
 
 
+ALTER FUNCTION rule_0.text_matches_reg(text, regtype) OWNER TO ray;
+
 --
--- Name: try_cast_double(text); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: try_cast_double(text); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.try_cast_double(inp text) RETURNS double precision
@@ -3162,8 +3047,10 @@ CREATE FUNCTION rule_0.try_cast_double(inp text) RETURNS double precision
 $$;
 
 
+ALTER FUNCTION rule_0.try_cast_double(inp text) OWNER TO ray;
+
 --
--- Name: update_cache_partition(regnamespace, regnamespace); Type: PROCEDURE; Schema: rule_0; Owner: -
+-- Name: update_cache_partition(regnamespace, regnamespace); Type: PROCEDURE; Schema: rule_0; Owner: ray
 --
 
 CREATE PROCEDURE rule_0.update_cache_partition(IN from_schema regnamespace, IN to_schema regnamespace DEFAULT NULL::regnamespace)
@@ -3220,8 +3107,10 @@ END
 $$;
 
 
+ALTER PROCEDURE rule_0.update_cache_partition(IN from_schema regnamespace, IN to_schema regnamespace) OWNER TO ray;
+
 --
--- Name: update_search_path(name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: update_search_path(name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.update_search_path(old_name name, new_name name) RETURNS text
@@ -3255,8 +3144,10 @@ CREATE FUNCTION rule_0.update_search_path(old_name name, new_name name) RETURNS 
 $$;
 
 
+ALTER FUNCTION rule_0.update_search_path(old_name name, new_name name) OWNER TO ray;
+
 --
--- Name: update_search_path_trigger(); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: update_search_path_trigger(); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.update_search_path_trigger() RETURNS trigger
@@ -3269,8 +3160,10 @@ CREATE FUNCTION rule_0.update_search_path_trigger() RETURNS trigger
 $$;
 
 
+ALTER FUNCTION rule_0.update_search_path_trigger() OWNER TO ray;
+
 --
--- Name: view_has_descendants(name, name); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: view_has_descendants(name, name); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.view_has_descendants(schema_name name, view_name name DEFAULT NULL::name) RETURNS boolean
@@ -3317,8 +3210,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.view_has_descendants(schema_name name, view_name name) OWNER TO ray;
+
 --
--- Name: view_name_must_be_a_view_tg(); Type: FUNCTION; Schema: rule_0; Owner: -
+-- Name: view_name_must_be_a_view_tg(); Type: FUNCTION; Schema: rule_0; Owner: ray
 --
 
 CREATE FUNCTION rule_0.view_name_must_be_a_view_tg() RETURNS trigger
@@ -3331,8 +3226,10 @@ END;
 $$;
 
 
+ALTER FUNCTION rule_0.view_name_must_be_a_view_tg() OWNER TO ray;
+
 --
--- Name: clear_and_copy(text, text); Type: PROCEDURE; Schema: update; Owner: -
+-- Name: clear_and_copy(text, text); Type: PROCEDURE; Schema: update; Owner: ray
 --
 
 CREATE PROCEDURE update.clear_and_copy(IN schema_name text, IN table_name text)
@@ -3364,8 +3261,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE update.clear_and_copy(IN schema_name text, IN table_name text) OWNER TO ray;
+
 --
--- Name: copy_new(text, text, text); Type: FUNCTION; Schema: update; Owner: -
+-- Name: copy_new(text, text, text); Type: FUNCTION; Schema: update; Owner: ray
 --
 
 CREATE FUNCTION update.copy_new(source text, target text, dfield text DEFAULT 'run_date'::text) RETURNS integer
@@ -3409,8 +3308,10 @@ END;
 $_$;
 
 
+ALTER FUNCTION update.copy_new(source text, target text, dfield text) OWNER TO ray;
+
 --
--- Name: delete_all_and_record(text, text, text); Type: PROCEDURE; Schema: update; Owner: -
+-- Name: delete_all_and_record(text, text, text); Type: PROCEDURE; Schema: update; Owner: ray
 --
 
 CREATE PROCEDURE update.delete_all_and_record(IN target text, IN script text DEFAULT 'unknown script'::text, IN entry text DEFAULT 'Called delete_all_and_record().'::text)
@@ -3460,8 +3361,10 @@ END;
 $_$;
 
 
+ALTER PROCEDURE update.delete_all_and_record(IN target text, IN script text, IN entry text) OWNER TO ray;
+
 --
--- Name: refresh_materialized_view(name, name); Type: PROCEDURE; Schema: update; Owner: -
+-- Name: refresh_materialized_view(name, name); Type: PROCEDURE; Schema: update; Owner: ray
 --
 
 CREATE PROCEDURE update.refresh_materialized_view(IN view_schema name, IN view_name name DEFAULT NULL::name)
@@ -3510,8 +3413,10 @@ CREATE PROCEDURE update.refresh_materialized_view(IN view_schema name, IN view_n
 $$;
 
 
+ALTER PROCEDURE update.refresh_materialized_view(IN view_schema name, IN view_name name) OWNER TO ray;
+
 --
--- Name: refresh_materialized_views(text[]); Type: PROCEDURE; Schema: update; Owner: -
+-- Name: refresh_materialized_views(text[]); Type: PROCEDURE; Schema: update; Owner: ray
 --
 
 CREATE PROCEDURE update.refresh_materialized_views(VARIADIC views text[])
@@ -3540,8 +3445,10 @@ END;
 $$;
 
 
+ALTER PROCEDURE update.refresh_materialized_views(VARIADIC views text[]) OWNER TO ray;
+
 --
--- Name: refresh_materialized_views(text); Type: PROCEDURE; Schema: update; Owner: -
+-- Name: refresh_materialized_views(text); Type: PROCEDURE; Schema: update; Owner: ray
 --
 
 CREATE PROCEDURE update.refresh_materialized_views(IN v_group text DEFAULT 'Default'::text)
@@ -3574,496 +3481,14 @@ CREATE PROCEDURE update.refresh_materialized_views(IN v_group text DEFAULT 'Defa
 $$;
 
 
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regclass,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regcollation,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regconfig,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regdictionary,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regnamespace,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regoper,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regoperator,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regproc,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regprocedure,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regrole,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = regtype,
-    RIGHTARG = text
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regclass
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regcollation
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regconfig
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regdictionary
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regnamespace
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regoper
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regoperator
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regproc
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regprocedure
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regrole
-);
-
-
---
--- Name: <>; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.<> (
-    FUNCTION = rule_0.reg_does_not_match_text,
-    LEFTARG = text,
-    RIGHTARG = regtype
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regclass,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regcollation,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regconfig,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regdictionary,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regnamespace,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regoper,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regoperator,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regproc,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regprocedure,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regrole,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.reg_matches_text,
-    LEFTARG = regtype,
-    RIGHTARG = text
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regclass
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regcollation
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regconfig
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regdictionary
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regnamespace
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regoper
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regoperator
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regproc
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regprocedure
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regrole
-);
-
-
---
--- Name: =; Type: OPERATOR; Schema: rule_0; Owner: -
---
-
-CREATE OPERATOR rule_0.= (
-    FUNCTION = rule_0.text_matches_reg,
-    LEFTARG = text,
-    RIGHTARG = regtype
-);
-
+ALTER PROCEDURE update.refresh_materialized_views(IN v_group text) OWNER TO ray;
 
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: amtype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: amtype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.amtype (
@@ -4072,8 +3497,10 @@ CREATE TABLE meta_lookup.amtype (
 );
 
 
+ALTER TABLE meta_lookup.amtype OWNER TO ray;
+
 --
--- Name: access_method; Type: VIEW; Schema: meta; Owner: -
+-- Name: access_method; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.access_method AS
@@ -4088,16 +3515,20 @@ CREATE VIEW meta.access_method AS
      JOIN pg_namespace nsp ON ((func.pronamespace = nsp.oid)));
 
 
+ALTER VIEW meta.access_method OWNER TO ray;
+
 --
--- Name: backend_pid; Type: VIEW; Schema: meta; Owner: -
+-- Name: backend_pid; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.backend_pid AS
  SELECT pg_backend_pid() AS pg_backend_pid;
 
 
+ALTER VIEW meta.backend_pid OWNER TO ray;
+
 --
--- Name: castcontext; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: castcontext; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.castcontext (
@@ -4106,8 +3537,10 @@ CREATE TABLE meta_lookup.castcontext (
 );
 
 
+ALTER TABLE meta_lookup.castcontext OWNER TO ray;
+
 --
--- Name: castmethod; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: castmethod; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.castmethod (
@@ -4116,8 +3549,10 @@ CREATE TABLE meta_lookup.castmethod (
 );
 
 
+ALTER TABLE meta_lookup.castmethod OWNER TO ray;
+
 --
--- Name: casts; Type: VIEW; Schema: meta; Owner: -
+-- Name: casts; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.casts AS
@@ -4151,8 +3586,10 @@ CREATE VIEW meta.casts AS
      JOIN typ to_typ ON ((pg_cast.casttarget = to_typ.type_id)));
 
 
+ALTER VIEW meta.casts OWNER TO ray;
+
 --
--- Name: column_sequences; Type: VIEW; Schema: meta; Owner: -
+-- Name: column_sequences; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.column_sequences AS
@@ -4168,8 +3605,10 @@ CREATE VIEW meta.column_sequences AS
   WHERE ((d.classid = ('pg_class'::regclass)::oid) AND (d.refclassid = ('pg_class'::regclass)::oid) AND (d.deptype = ANY (ARRAY['i'::"char", 'a'::"char"])) AND (t.relkind = ANY (ARRAY['r'::"char", 'p'::"char"])) AND (s.relkind = 'S'::"char"));
 
 
+ALTER VIEW meta.column_sequences OWNER TO ray;
+
 --
--- Name: columns_simple; Type: VIEW; Schema: meta; Owner: -
+-- Name: columns_simple; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.columns_simple AS
@@ -4185,8 +3624,10 @@ CREATE VIEW meta.columns_simple AS
   WHERE ((a.attnum > 0) AND (a.atttypid <> (0)::oid) AND (a.attisdropped = false));
 
 
+ALTER VIEW meta.columns_simple OWNER TO ray;
+
 --
--- Name: composite_type; Type: VIEW; Schema: meta; Owner: -
+-- Name: composite_type; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.composite_type AS
@@ -4198,8 +3639,10 @@ CREATE VIEW meta.composite_type AS
   ORDER BY nsp.nspname, cl.relname;
 
 
+ALTER VIEW meta.composite_type OWNER TO ray;
+
 --
--- Name: composite_type_field; Type: VIEW; Schema: meta; Owner: -
+-- Name: composite_type_field; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.composite_type_field AS
@@ -4223,8 +3666,10 @@ CREATE VIEW meta.composite_type_field AS
   ORDER BY ct.schema_name, ct.composite_type, att.attnum;
 
 
+ALTER VIEW meta.composite_type_field OWNER TO ray;
+
 --
--- Name: domains; Type: VIEW; Schema: meta; Owner: -
+-- Name: domains; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.domains AS
@@ -4279,8 +3724,10 @@ CREATE VIEW meta.domains AS
   ORDER BY (dom.schema_name)::text, (dom.domain_name)::text;
 
 
+ALTER VIEW meta.domains OWNER TO ray;
+
 --
--- Name: enum_value; Type: VIEW; Schema: meta; Owner: -
+-- Name: enum_value; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.enum_value AS
@@ -4292,8 +3739,10 @@ CREATE VIEW meta.enum_value AS
   ORDER BY t.typname, e.enumsortorder;
 
 
+ALTER VIEW meta.enum_value OWNER TO ray;
+
 --
--- Name: error_class; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: error_class; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.error_class (
@@ -4302,8 +3751,10 @@ CREATE TABLE meta_lookup.error_class (
 );
 
 
+ALTER TABLE meta_lookup.error_class OWNER TO ray;
+
 --
--- Name: error_code; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: error_code; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.error_code (
@@ -4313,8 +3764,10 @@ CREATE TABLE meta_lookup.error_code (
 );
 
 
+ALTER TABLE meta_lookup.error_code OWNER TO ray;
+
 --
--- Name: error; Type: VIEW; Schema: meta; Owner: -
+-- Name: error; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.error AS
@@ -4325,8 +3778,10 @@ CREATE VIEW meta.error AS
      JOIN meta_lookup.error_code USING (error_class));
 
 
+ALTER VIEW meta.error OWNER TO ray;
+
 --
--- Name: extensions; Type: VIEW; Schema: meta; Owner: -
+-- Name: extensions; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.extensions AS
@@ -4341,8 +3796,10 @@ CREATE VIEW meta.extensions AS
      JOIN pg_roles rolz ON ((ext.extowner = rolz.oid)));
 
 
+ALTER VIEW meta.extensions OWNER TO ray;
+
 --
--- Name: attgenerated; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: attgenerated; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.attgenerated (
@@ -4351,8 +3808,10 @@ CREATE TABLE meta_lookup.attgenerated (
 );
 
 
+ALTER TABLE meta_lookup.attgenerated OWNER TO ray;
+
 --
--- Name: attidentity; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: attidentity; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.attidentity (
@@ -4361,8 +3820,10 @@ CREATE TABLE meta_lookup.attidentity (
 );
 
 
+ALTER TABLE meta_lookup.attidentity OWNER TO ray;
+
 --
--- Name: fields; Type: VIEW; Schema: meta; Owner: -
+-- Name: fields; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.fields AS
@@ -4383,8 +3844,10 @@ CREATE VIEW meta.fields AS
   ORDER BY s.nspname, c.relname, a.attnum;
 
 
+ALTER VIEW meta.fields OWNER TO ray;
+
 --
--- Name: index_fields; Type: VIEW; Schema: meta; Owner: -
+-- Name: index_fields; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.index_fields AS
@@ -4400,8 +3863,10 @@ CREATE VIEW meta.index_fields AS
   GROUP BY ns.nspname, tbl.relname, idx.relname, idx.relkind;
 
 
+ALTER VIEW meta.index_fields OWNER TO ray;
+
 --
--- Name: language_functions; Type: VIEW; Schema: meta; Owner: -
+-- Name: language_functions; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.language_functions AS
@@ -4456,8 +3921,10 @@ UNION
   ORDER BY 2, 3;
 
 
+ALTER VIEW meta.language_functions OWNER TO ray;
+
 --
--- Name: languages; Type: VIEW; Schema: meta; Owner: -
+-- Name: languages; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.languages AS
@@ -4470,8 +3937,10 @@ CREATE VIEW meta.languages AS
      JOIN pg_roles r ON ((l.lanowner = r.oid)));
 
 
+ALTER VIEW meta.languages OWNER TO ray;
+
 --
--- Name: materialized_view_age; Type: VIEW; Schema: meta; Owner: -
+-- Name: materialized_view_age; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.materialized_view_age AS
@@ -4501,16 +3970,20 @@ CREATE VIEW meta.materialized_view_age AS
   ORDER BY refresh_time;
 
 
+ALTER VIEW meta.materialized_view_age OWNER TO ray;
+
 --
--- Name: my_temp_schema; Type: VIEW; Schema: meta; Owner: -
+-- Name: my_temp_schema; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.my_temp_schema AS
  SELECT pg_my_temp_schema() AS pg_my_temp_schema;
 
 
+ALTER VIEW meta.my_temp_schema OWNER TO ray;
+
 --
--- Name: operator_family; Type: VIEW; Schema: meta; Owner: -
+-- Name: operator_family; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.operator_family AS
@@ -4525,8 +3998,10 @@ CREATE VIEW meta.operator_family AS
      JOIN pg_roles r ON ((o.opfowner = r.oid)));
 
 
+ALTER VIEW meta.operator_family OWNER TO ray;
+
 --
--- Name: primary_key; Type: VIEW; Schema: meta; Owner: -
+-- Name: primary_key; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.primary_key AS
@@ -4551,8 +4026,10 @@ CREATE VIEW meta.primary_key AS
   GROUP BY c.oid, s.nspname, cl.relname, i.relname, c.conname, c.condeferred, c.condeferrable, c.conislocal, c.connoinherit, c.coninhcount, c.conkey;
 
 
+ALTER VIEW meta.primary_key OWNER TO ray;
+
 --
--- Name: primary_keys; Type: VIEW; Schema: meta; Owner: -
+-- Name: primary_keys; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.primary_keys AS
@@ -4582,8 +4059,10 @@ CREATE VIEW meta.primary_keys AS
   ORDER BY schema_name, table_name;
 
 
+ALTER VIEW meta.primary_keys OWNER TO ray;
+
 --
--- Name: view_dependencies; Type: VIEW; Schema: meta; Owner: -
+-- Name: view_dependencies; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.view_dependencies AS
@@ -4630,8 +4109,10 @@ CREATE VIEW meta.view_dependencies AS
   ORDER BY dependent_schema, dependent_view, source_schema, source_view;
 
 
+ALTER VIEW meta.view_dependencies OWNER TO ray;
+
 --
--- Name: relation_dependency_order; Type: VIEW; Schema: meta; Owner: -
+-- Name: relation_dependency_order; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.relation_dependency_order AS
@@ -4676,8 +4157,10 @@ CREATE VIEW meta.relation_dependency_order AS
   ORDER BY ord;
 
 
+ALTER VIEW meta.relation_dependency_order OWNER TO ray;
+
 --
--- Name: relation_list; Type: VIEW; Schema: meta; Owner: -
+-- Name: relation_list; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.relation_list AS
@@ -4703,8 +4186,10 @@ CREATE VIEW meta.relation_list AS
   ORDER BY n.nspname, c.relname;
 
 
+ALTER VIEW meta.relation_list OWNER TO ray;
+
 --
--- Name: relkind; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: relkind; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.relkind (
@@ -4713,8 +4198,10 @@ CREATE TABLE meta_lookup.relkind (
 );
 
 
+ALTER TABLE meta_lookup.relkind OWNER TO ray;
+
 --
--- Name: relation_size; Type: VIEW; Schema: meta; Owner: -
+-- Name: relation_size; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.relation_size AS
@@ -4737,8 +4224,10 @@ CREATE VIEW meta.relation_size AS
   ORDER BY table_schema, table_name;
 
 
+ALTER VIEW meta.relation_size OWNER TO ray;
+
 --
--- Name: role_setting; Type: VIEW; Schema: meta; Owner: -
+-- Name: role_setting; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.role_setting AS
@@ -4768,8 +4257,10 @@ CREATE VIEW meta.role_setting AS
    FROM exploded;
 
 
+ALTER VIEW meta.role_setting OWNER TO ray;
+
 --
--- Name: row_level_policy; Type: VIEW; Schema: meta; Owner: -
+-- Name: row_level_policy; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.row_level_policy AS
@@ -4783,8 +4274,10 @@ CREATE VIEW meta.row_level_policy AS
    FROM pg_policies;
 
 
+ALTER VIEW meta.row_level_policy OWNER TO ray;
+
 --
--- Name: schema_size; Type: VIEW; Schema: meta; Owner: -
+-- Name: schema_size; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.schema_size AS
@@ -4796,8 +4289,10 @@ CREATE VIEW meta.schema_size AS
   ORDER BY schema_name;
 
 
+ALTER VIEW meta.schema_size OWNER TO ray;
+
 --
--- Name: schemata; Type: VIEW; Schema: meta; Owner: -
+-- Name: schemata; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.schemata AS
@@ -4810,8 +4305,10 @@ CREATE VIEW meta.schemata AS
   ORDER BY nsp.nspname;
 
 
+ALTER VIEW meta.schemata OWNER TO ray;
+
 --
--- Name: search_path; Type: VIEW; Schema: meta; Owner: -
+-- Name: search_path; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.search_path AS
@@ -4821,8 +4318,10 @@ CREATE VIEW meta.search_path AS
   WHERE (schema_name <> ''::text);
 
 
+ALTER VIEW meta.search_path OWNER TO ray;
+
 --
--- Name: session_settings; Type: VIEW; Schema: meta; Owner: -
+-- Name: session_settings; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.session_settings AS
@@ -4849,8 +4348,10 @@ UNION
   ORDER BY 1;
 
 
+ALTER VIEW meta.session_settings OWNER TO ray;
+
 --
--- Name: simple_primary_key; Type: VIEW; Schema: meta; Owner: -
+-- Name: simple_primary_key; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.simple_primary_key AS
@@ -4862,8 +4363,10 @@ CREATE VIEW meta.simple_primary_key AS
   ORDER BY schema_name, table_name;
 
 
+ALTER VIEW meta.simple_primary_key OWNER TO ray;
+
 --
--- Name: system_foreign_keys; Type: VIEW; Schema: meta; Owner: -
+-- Name: system_foreign_keys; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.system_foreign_keys AS
@@ -4876,8 +4379,10 @@ CREATE VIEW meta.system_foreign_keys AS
    FROM pg_get_catalog_foreign_keys() pg_get_catalog_foreign_keys(fktable, fkcols, pktable, pkcols, is_array, is_opt);
 
 
+ALTER VIEW meta.system_foreign_keys OWNER TO ray;
+
 --
--- Name: table_size; Type: VIEW; Schema: meta; Owner: -
+-- Name: table_size; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.table_size AS
@@ -4889,8 +4394,10 @@ CREATE VIEW meta.table_size AS
   ORDER BY schemaname, tablename;
 
 
+ALTER VIEW meta.table_size OWNER TO ray;
+
 --
--- Name: tables_simple; Type: VIEW; Schema: meta; Owner: -
+-- Name: tables_simple; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.tables_simple AS
@@ -4904,43 +4411,45 @@ CREATE VIEW meta.tables_simple AS
   WHERE (c.relkind = ANY (ARRAY['r'::"char", 'p'::"char"]));
 
 
+ALTER VIEW meta.tables_simple OWNER TO ray;
+
 --
--- Name: VIEW tables_simple; Type: COMMENT; Schema: meta; Owner: -
+-- Name: VIEW tables_simple; Type: COMMENT; Schema: meta; Owner: ray
 --
 
 COMMENT ON VIEW meta.tables_simple IS 'A simple representation of the tables in the database';
 
 
 --
--- Name: COLUMN tables_simple.schema_name; Type: COMMENT; Schema: meta; Owner: -
+-- Name: COLUMN tables_simple.schema_name; Type: COMMENT; Schema: meta; Owner: ray
 --
 
 COMMENT ON COLUMN meta.tables_simple.schema_name IS 'Name of the schema containing the table';
 
 
 --
--- Name: COLUMN tables_simple.table_name; Type: COMMENT; Schema: meta; Owner: -
+-- Name: COLUMN tables_simple.table_name; Type: COMMENT; Schema: meta; Owner: ray
 --
 
 COMMENT ON COLUMN meta.tables_simple.table_name IS 'Name of the table';
 
 
 --
--- Name: COLUMN tables_simple.description; Type: COMMENT; Schema: meta; Owner: -
+-- Name: COLUMN tables_simple.description; Type: COMMENT; Schema: meta; Owner: ray
 --
 
 COMMENT ON COLUMN meta.tables_simple.description IS 'Description of the table';
 
 
 --
--- Name: COLUMN tables_simple.owner; Type: COMMENT; Schema: meta; Owner: -
+-- Name: COLUMN tables_simple.owner; Type: COMMENT; Schema: meta; Owner: ray
 --
 
 COMMENT ON COLUMN meta.tables_simple.owner IS 'The user that owns the table';
 
 
 --
--- Name: tgenabled; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: tgenabled; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.tgenabled (
@@ -4949,8 +4458,10 @@ CREATE TABLE meta_lookup.tgenabled (
 );
 
 
+ALTER TABLE meta_lookup.tgenabled OWNER TO ray;
+
 --
--- Name: tgtype; Type: VIEW; Schema: meta_lookup; Owner: -
+-- Name: tgtype; Type: VIEW; Schema: meta_lookup; Owner: ray
 --
 
 CREATE VIEW meta_lookup.tgtype AS
@@ -4982,8 +4493,10 @@ CREATE VIEW meta_lookup.tgtype AS
   ORDER BY tgtype_values.num;
 
 
+ALTER VIEW meta_lookup.tgtype OWNER TO ray;
+
 --
--- Name: triggers; Type: VIEW; Schema: meta; Owner: -
+-- Name: triggers; Type: VIEW; Schema: meta; Owner: ray
 --
 
 CREATE VIEW meta.triggers AS
@@ -5046,8 +4559,10 @@ CREATE VIEW meta.triggers AS
    FROM payload p;
 
 
+ALTER VIEW meta.triggers OWNER TO ray;
+
 --
--- Name: view_key_fields; Type: TABLE; Schema: meta; Owner: -
+-- Name: view_key_fields; Type: TABLE; Schema: meta; Owner: ray
 --
 
 CREATE TABLE meta.view_key_fields (
@@ -5057,8 +4572,10 @@ CREATE TABLE meta.view_key_fields (
 );
 
 
+ALTER TABLE meta.view_key_fields OWNER TO ray;
+
 --
--- Name: view_keys; Type: TABLE; Schema: meta; Owner: -
+-- Name: view_keys; Type: TABLE; Schema: meta; Owner: ray
 --
 
 CREATE TABLE meta.view_keys (
@@ -5067,8 +4584,10 @@ CREATE TABLE meta.view_keys (
 );
 
 
+ALTER TABLE meta.view_keys OWNER TO ray;
+
 --
--- Name: aggfinalmodify; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: aggfinalmodify; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.aggfinalmodify (
@@ -5077,8 +4596,10 @@ CREATE TABLE meta_lookup.aggfinalmodify (
 );
 
 
+ALTER TABLE meta_lookup.aggfinalmodify OWNER TO ray;
+
 --
--- Name: aggkind; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: aggkind; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.aggkind (
@@ -5087,8 +4608,10 @@ CREATE TABLE meta_lookup.aggkind (
 );
 
 
+ALTER TABLE meta_lookup.aggkind OWNER TO ray;
+
 --
--- Name: aggmfinalmodify; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: aggmfinalmodify; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.aggmfinalmodify (
@@ -5097,8 +4620,10 @@ CREATE TABLE meta_lookup.aggmfinalmodify (
 );
 
 
+ALTER TABLE meta_lookup.aggmfinalmodify OWNER TO ray;
+
 --
--- Name: amoppurpose; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: amoppurpose; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.amoppurpose (
@@ -5107,8 +4632,10 @@ CREATE TABLE meta_lookup.amoppurpose (
 );
 
 
+ALTER TABLE meta_lookup.amoppurpose OWNER TO ray;
+
 --
--- Name: attalign; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: attalign; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.attalign (
@@ -5117,8 +4644,10 @@ CREATE TABLE meta_lookup.attalign (
 );
 
 
+ALTER TABLE meta_lookup.attalign OWNER TO ray;
+
 --
--- Name: attcompression; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: attcompression; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.attcompression (
@@ -5127,8 +4656,10 @@ CREATE TABLE meta_lookup.attcompression (
 );
 
 
+ALTER TABLE meta_lookup.attcompression OWNER TO ray;
+
 --
--- Name: attstorage; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: attstorage; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.attstorage (
@@ -5138,8 +4669,10 @@ CREATE TABLE meta_lookup.attstorage (
 );
 
 
+ALTER TABLE meta_lookup.attstorage OWNER TO ray;
+
 --
--- Name: collprovider; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: collprovider; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.collprovider (
@@ -5148,8 +4681,10 @@ CREATE TABLE meta_lookup.collprovider (
 );
 
 
+ALTER TABLE meta_lookup.collprovider OWNER TO ray;
+
 --
--- Name: comment_targets; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: comment_targets; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.comment_targets (
@@ -5157,8 +4692,10 @@ CREATE TABLE meta_lookup.comment_targets (
 );
 
 
+ALTER TABLE meta_lookup.comment_targets OWNER TO ray;
+
 --
--- Name: confdeltype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: confdeltype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.confdeltype (
@@ -5167,8 +4704,10 @@ CREATE TABLE meta_lookup.confdeltype (
 );
 
 
+ALTER TABLE meta_lookup.confdeltype OWNER TO ray;
+
 --
--- Name: confmatchtype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: confmatchtype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.confmatchtype (
@@ -5177,8 +4716,10 @@ CREATE TABLE meta_lookup.confmatchtype (
 );
 
 
+ALTER TABLE meta_lookup.confmatchtype OWNER TO ray;
+
 --
--- Name: confupdtype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: confupdtype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.confupdtype (
@@ -5187,8 +4728,10 @@ CREATE TABLE meta_lookup.confupdtype (
 );
 
 
+ALTER TABLE meta_lookup.confupdtype OWNER TO ray;
+
 --
--- Name: contype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: contype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.contype (
@@ -5197,8 +4740,10 @@ CREATE TABLE meta_lookup.contype (
 );
 
 
+ALTER TABLE meta_lookup.contype OWNER TO ray;
+
 --
--- Name: datlocprovider; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: datlocprovider; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.datlocprovider (
@@ -5207,8 +4752,10 @@ CREATE TABLE meta_lookup.datlocprovider (
 );
 
 
+ALTER TABLE meta_lookup.datlocprovider OWNER TO ray;
+
 --
--- Name: defaclobjtype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: defaclobjtype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.defaclobjtype (
@@ -5217,8 +4764,10 @@ CREATE TABLE meta_lookup.defaclobjtype (
 );
 
 
+ALTER TABLE meta_lookup.defaclobjtype OWNER TO ray;
+
 --
--- Name: deptype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: deptype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.deptype (
@@ -5227,8 +4776,10 @@ CREATE TABLE meta_lookup.deptype (
 );
 
 
+ALTER TABLE meta_lookup.deptype OWNER TO ray;
+
 --
--- Name: ev_enabled; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: ev_enabled; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.ev_enabled (
@@ -5237,8 +4788,10 @@ CREATE TABLE meta_lookup.ev_enabled (
 );
 
 
+ALTER TABLE meta_lookup.ev_enabled OWNER TO ray;
+
 --
--- Name: ev_type; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: ev_type; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.ev_type (
@@ -5247,8 +4800,10 @@ CREATE TABLE meta_lookup.ev_type (
 );
 
 
+ALTER TABLE meta_lookup.ev_type OWNER TO ray;
+
 --
--- Name: evtenabled; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: evtenabled; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.evtenabled (
@@ -5257,8 +4812,10 @@ CREATE TABLE meta_lookup.evtenabled (
 );
 
 
+ALTER TABLE meta_lookup.evtenabled OWNER TO ray;
+
 --
--- Name: lock_conflicts; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: lock_conflicts; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.lock_conflicts (
@@ -5268,8 +4825,10 @@ CREATE TABLE meta_lookup.lock_conflicts (
 );
 
 
+ALTER TABLE meta_lookup.lock_conflicts OWNER TO ray;
+
 --
--- Name: lock_level; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: lock_level; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.lock_level (
@@ -5277,8 +4836,10 @@ CREATE TABLE meta_lookup.lock_level (
 );
 
 
+ALTER TABLE meta_lookup.lock_level OWNER TO ray;
+
 --
--- Name: lock_mode; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: lock_mode; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.lock_mode (
@@ -5288,8 +4849,10 @@ CREATE TABLE meta_lookup.lock_mode (
 );
 
 
+ALTER TABLE meta_lookup.lock_mode OWNER TO ray;
+
 --
--- Name: message_level; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: message_level; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.message_level (
@@ -5297,8 +4860,10 @@ CREATE TABLE meta_lookup.message_level (
 );
 
 
+ALTER TABLE meta_lookup.message_level OWNER TO ray;
+
 --
--- Name: oprkind; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: oprkind; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.oprkind (
@@ -5307,8 +4872,10 @@ CREATE TABLE meta_lookup.oprkind (
 );
 
 
+ALTER TABLE meta_lookup.oprkind OWNER TO ray;
+
 --
--- Name: partstrat; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: partstrat; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.partstrat (
@@ -5317,8 +4884,10 @@ CREATE TABLE meta_lookup.partstrat (
 );
 
 
+ALTER TABLE meta_lookup.partstrat OWNER TO ray;
+
 --
--- Name: polcmd; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: polcmd; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.polcmd (
@@ -5327,8 +4896,10 @@ CREATE TABLE meta_lookup.polcmd (
 );
 
 
+ALTER TABLE meta_lookup.polcmd OWNER TO ray;
+
 --
--- Name: privtype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: privtype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.privtype (
@@ -5337,8 +4908,10 @@ CREATE TABLE meta_lookup.privtype (
 );
 
 
+ALTER TABLE meta_lookup.privtype OWNER TO ray;
+
 --
--- Name: proargmode; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: proargmode; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.proargmode (
@@ -5347,8 +4920,10 @@ CREATE TABLE meta_lookup.proargmode (
 );
 
 
+ALTER TABLE meta_lookup.proargmode OWNER TO ray;
+
 --
--- Name: prokind; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: prokind; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.prokind (
@@ -5357,8 +4932,10 @@ CREATE TABLE meta_lookup.prokind (
 );
 
 
+ALTER TABLE meta_lookup.prokind OWNER TO ray;
+
 --
--- Name: proparallel; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: proparallel; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.proparallel (
@@ -5367,8 +4944,10 @@ CREATE TABLE meta_lookup.proparallel (
 );
 
 
+ALTER TABLE meta_lookup.proparallel OWNER TO ray;
+
 --
--- Name: provolatile; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: provolatile; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.provolatile (
@@ -5377,8 +4956,10 @@ CREATE TABLE meta_lookup.provolatile (
 );
 
 
+ALTER TABLE meta_lookup.provolatile OWNER TO ray;
+
 --
--- Name: relpersistence; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: relpersistence; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.relpersistence (
@@ -5387,8 +4968,10 @@ CREATE TABLE meta_lookup.relpersistence (
 );
 
 
+ALTER TABLE meta_lookup.relpersistence OWNER TO ray;
+
 --
--- Name: relreplident; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: relreplident; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.relreplident (
@@ -5397,8 +4980,10 @@ CREATE TABLE meta_lookup.relreplident (
 );
 
 
+ALTER TABLE meta_lookup.relreplident OWNER TO ray;
+
 --
--- Name: srsubstate; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: srsubstate; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.srsubstate (
@@ -5407,8 +4992,10 @@ CREATE TABLE meta_lookup.srsubstate (
 );
 
 
+ALTER TABLE meta_lookup.srsubstate OWNER TO ray;
+
 --
--- Name: substream; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: substream; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.substream (
@@ -5417,8 +5004,10 @@ CREATE TABLE meta_lookup.substream (
 );
 
 
+ALTER TABLE meta_lookup.substream OWNER TO ray;
+
 --
--- Name: subtwophasestate; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: subtwophasestate; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.subtwophasestate (
@@ -5427,8 +5016,10 @@ CREATE TABLE meta_lookup.subtwophasestate (
 );
 
 
+ALTER TABLE meta_lookup.subtwophasestate OWNER TO ray;
+
 --
--- Name: trigger_operation; Type: VIEW; Schema: meta_lookup; Owner: -
+-- Name: trigger_operation; Type: VIEW; Schema: meta_lookup; Owner: ray
 --
 
 CREATE VIEW meta_lookup.trigger_operation AS
@@ -5437,8 +5028,10 @@ CREATE VIEW meta_lookup.trigger_operation AS
   WHERE (operation IS NOT NULL);
 
 
+ALTER VIEW meta_lookup.trigger_operation OWNER TO ray;
+
 --
--- Name: trigger_scope; Type: VIEW; Schema: meta_lookup; Owner: -
+-- Name: trigger_scope; Type: VIEW; Schema: meta_lookup; Owner: ray
 --
 
 CREATE VIEW meta_lookup.trigger_scope AS
@@ -5447,8 +5040,10 @@ CREATE VIEW meta_lookup.trigger_scope AS
   WHERE (scope IS NOT NULL);
 
 
+ALTER VIEW meta_lookup.trigger_scope OWNER TO ray;
+
 --
--- Name: trigger_timing; Type: VIEW; Schema: meta_lookup; Owner: -
+-- Name: trigger_timing; Type: VIEW; Schema: meta_lookup; Owner: ray
 --
 
 CREATE VIEW meta_lookup.trigger_timing AS
@@ -5457,8 +5052,10 @@ CREATE VIEW meta_lookup.trigger_timing AS
   WHERE (timing IS NOT NULL);
 
 
+ALTER VIEW meta_lookup.trigger_timing OWNER TO ray;
+
 --
--- Name: typalign; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: typalign; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.typalign (
@@ -5467,8 +5064,10 @@ CREATE TABLE meta_lookup.typalign (
 );
 
 
+ALTER TABLE meta_lookup.typalign OWNER TO ray;
+
 --
--- Name: typcategory; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: typcategory; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.typcategory (
@@ -5477,8 +5076,10 @@ CREATE TABLE meta_lookup.typcategory (
 );
 
 
+ALTER TABLE meta_lookup.typcategory OWNER TO ray;
+
 --
--- Name: typstorage; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: typstorage; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.typstorage (
@@ -5488,8 +5089,10 @@ CREATE TABLE meta_lookup.typstorage (
 );
 
 
+ALTER TABLE meta_lookup.typstorage OWNER TO ray;
+
 --
--- Name: typtype; Type: TABLE; Schema: meta_lookup; Owner: -
+-- Name: typtype; Type: TABLE; Schema: meta_lookup; Owner: ray
 --
 
 CREATE TABLE meta_lookup.typtype (
@@ -5498,8 +5101,10 @@ CREATE TABLE meta_lookup.typtype (
 );
 
 
+ALTER TABLE meta_lookup.typtype OWNER TO ray;
+
 --
--- Name: column_privilege; Type: VIEW; Schema: security; Owner: -
+-- Name: column_privilege; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.column_privilege AS
@@ -5531,8 +5136,10 @@ CREATE VIEW security.column_privilege AS
   ORDER BY cols.schema_name, cols.relation, cols.column_name, tee.role_name, (cols.vals).privilege_type;
 
 
+ALTER VIEW security.column_privilege OWNER TO ray;
+
 --
--- Name: database_privileges; Type: VIEW; Schema: security; Owner: -
+-- Name: database_privileges; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.database_privileges AS
@@ -5559,8 +5166,10 @@ CREATE VIEW security.database_privileges AS
    FROM base;
 
 
+ALTER VIEW security.database_privileges OWNER TO ray;
+
 --
--- Name: privileges_old; Type: VIEW; Schema: security; Owner: -
+-- Name: privileges_old; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.privileges_old AS
@@ -5603,8 +5212,10 @@ CREATE VIEW security.privileges_old AS
      JOIN pg_user r ON ((a.grantor = r.usesysid)));
 
 
+ALTER VIEW security.privileges_old OWNER TO ray;
+
 --
--- Name: relation_privilege; Type: VIEW; Schema: security; Owner: -
+-- Name: relation_privilege; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.relation_privilege AS
@@ -5637,8 +5248,10 @@ CREATE VIEW security.relation_privilege AS
   ORDER BY objects.schema_name, objects.relation, tee.role_name, relkind.relation_type;
 
 
+ALTER VIEW security.relation_privilege OWNER TO ray;
+
 --
--- Name: role_membership; Type: VIEW; Schema: security; Owner: -
+-- Name: role_membership; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.role_membership AS
@@ -5652,8 +5265,10 @@ CREATE VIEW security.role_membership AS
    FROM pg_auth_members;
 
 
+ALTER VIEW security.role_membership OWNER TO ray;
+
 --
--- Name: roles; Type: VIEW; Schema: security; Owner: -
+-- Name: roles; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.roles AS
@@ -5663,8 +5278,10 @@ CREATE VIEW security.roles AS
    FROM pg_roles;
 
 
+ALTER VIEW security.roles OWNER TO ray;
+
 --
--- Name: row_privilege; Type: VIEW; Schema: security; Owner: -
+-- Name: row_privilege; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.row_privilege AS
@@ -5676,8 +5293,10 @@ CREATE VIEW security.row_privilege AS
   ORDER BY (unnest(roles));
 
 
+ALTER VIEW security.row_privilege OWNER TO ray;
+
 --
--- Name: schema_privileges_old; Type: VIEW; Schema: security; Owner: -
+-- Name: schema_privileges_old; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.schema_privileges_old AS
@@ -5704,8 +5323,10 @@ CREATE VIEW security.schema_privileges_old AS
    FROM base;
 
 
+ALTER VIEW security.schema_privileges_old OWNER TO ray;
+
 --
--- Name: system_privilege; Type: VIEW; Schema: security; Owner: -
+-- Name: system_privilege; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.system_privilege AS
@@ -5741,8 +5362,10 @@ UNION
   ORDER BY 1, 2;
 
 
+ALTER VIEW security.system_privilege OWNER TO ray;
+
 --
--- Name: table_privileges_old; Type: VIEW; Schema: security; Owner: -
+-- Name: table_privileges_old; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.table_privileges_old AS
@@ -5755,8 +5378,10 @@ CREATE VIEW security.table_privileges_old AS
    FROM information_schema.role_table_grants;
 
 
+ALTER VIEW security.table_privileges_old OWNER TO ray;
+
 --
--- Name: users; Type: VIEW; Schema: security; Owner: -
+-- Name: users; Type: VIEW; Schema: security; Owner: ray
 --
 
 CREATE VIEW security.users AS
@@ -5769,8 +5394,10 @@ CREATE VIEW security.users AS
   WHERE (rolcanlogin = true);
 
 
+ALTER VIEW security.users OWNER TO ray;
+
 --
--- Name: privilege_type; Type: TABLE; Schema: security_lookup; Owner: -
+-- Name: privilege_type; Type: TABLE; Schema: security_lookup; Owner: ray
 --
 
 CREATE TABLE security_lookup.privilege_type (
@@ -5779,8 +5406,10 @@ CREATE TABLE security_lookup.privilege_type (
 );
 
 
+ALTER TABLE security_lookup.privilege_type OWNER TO ray;
+
 --
--- Name: system_privilege_type; Type: TABLE; Schema: security_lookup; Owner: -
+-- Name: system_privilege_type; Type: TABLE; Schema: security_lookup; Owner: ray
 --
 
 CREATE TABLE security_lookup.system_privilege_type (
@@ -5788,8 +5417,10 @@ CREATE TABLE security_lookup.system_privilege_type (
 );
 
 
+ALTER TABLE security_lookup.system_privilege_type OWNER TO ray;
+
 --
--- Name: valid_object_privileges; Type: TABLE; Schema: security_lookup; Owner: -
+-- Name: valid_object_privileges; Type: TABLE; Schema: security_lookup; Owner: ray
 --
 
 CREATE TABLE security_lookup.valid_object_privileges (
@@ -5798,8 +5429,10 @@ CREATE TABLE security_lookup.valid_object_privileges (
 );
 
 
+ALTER TABLE security_lookup.valid_object_privileges OWNER TO ray;
+
 --
--- Name: copy; Type: TABLE; Schema: update; Owner: -
+-- Name: copy; Type: TABLE; Schema: update; Owner: ray
 --
 
 CREATE TABLE update.copy (
@@ -5812,8 +5445,10 @@ CREATE TABLE update.copy (
 );
 
 
+ALTER TABLE update.copy OWNER TO ray;
+
 --
--- Name: refresh_sequence; Type: TABLE; Schema: update; Owner: -
+-- Name: refresh_sequence; Type: TABLE; Schema: update; Owner: ray
 --
 
 CREATE TABLE update.refresh_sequence (
@@ -5825,8 +5460,10 @@ CREATE TABLE update.refresh_sequence (
 );
 
 
+ALTER TABLE update.refresh_sequence OWNER TO ray;
+
 --
--- Name: refresh_sequence_2_refresh_id_seq; Type: SEQUENCE; Schema: update; Owner: -
+-- Name: refresh_sequence_2_refresh_id_seq; Type: SEQUENCE; Schema: update; Owner: ray
 --
 
 ALTER TABLE update.refresh_sequence ALTER COLUMN refresh_id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -5840,7 +5477,7 @@ ALTER TABLE update.refresh_sequence ALTER COLUMN refresh_id ADD GENERATED BY DEF
 
 
 --
--- Name: source_source_id_seq; Type: SEQUENCE; Schema: update; Owner: -
+-- Name: source_source_id_seq; Type: SEQUENCE; Schema: update; Owner: ray
 --
 
 ALTER TABLE update.copy ALTER COLUMN source_id ADD GENERATED ALWAYS AS IDENTITY (
@@ -5854,7 +5491,7 @@ ALTER TABLE update.copy ALTER COLUMN source_id ADD GENERATED ALWAYS AS IDENTITY 
 
 
 --
--- Name: view_dependencies; Type: VIEW; Schema: update; Owner: -
+-- Name: view_dependencies; Type: VIEW; Schema: update; Owner: ray
 --
 
 CREATE VIEW update.view_dependencies AS
@@ -5874,8 +5511,10 @@ CREATE VIEW update.view_dependencies AS
   ORDER BY dependent_ns.nspname, dependent_view.relname;
 
 
+ALTER VIEW update.view_dependencies OWNER TO ray;
+
 --
--- Name: view_dependency_tree; Type: VIEW; Schema: update; Owner: -
+-- Name: view_dependency_tree; Type: VIEW; Schema: update; Owner: ray
 --
 
 CREATE VIEW update.view_dependency_tree AS
@@ -5936,8 +5575,10 @@ CREATE VIEW update.view_dependency_tree AS
   WHERE (b.source IS NULL);
 
 
+ALTER VIEW update.view_dependency_tree OWNER TO ray;
+
 --
--- Data for Name: view_key_fields; Type: TABLE DATA; Schema: meta; Owner: -
+-- Data for Name: view_key_fields; Type: TABLE DATA; Schema: meta; Owner: ray
 --
 
 COPY meta.view_key_fields (view_name, key_name, field_name) FROM stdin;
@@ -5945,7 +5586,7 @@ COPY meta.view_key_fields (view_name, key_name, field_name) FROM stdin;
 
 
 --
--- Data for Name: view_keys; Type: TABLE DATA; Schema: meta; Owner: -
+-- Data for Name: view_keys; Type: TABLE DATA; Schema: meta; Owner: ray
 --
 
 COPY meta.view_keys (view_name, key_name) FROM stdin;
@@ -5953,7 +5594,7 @@ COPY meta.view_keys (view_name, key_name) FROM stdin;
 
 
 --
--- Data for Name: aggfinalmodify; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: aggfinalmodify; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.aggfinalmodify (aggfinalmodify, aggregate_transition_state_modification_policy) FROM stdin;
@@ -5964,7 +5605,7 @@ w	Writes on the value
 
 
 --
--- Data for Name: aggkind; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: aggkind; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.aggkind (aggkind, aggregate_kind) FROM stdin;
@@ -5975,7 +5616,7 @@ h	Hypothetical set
 
 
 --
--- Data for Name: aggmfinalmodify; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: aggmfinalmodify; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.aggmfinalmodify (aggmfinalmodify, aggregate_transition_state_modification_policy) FROM stdin;
@@ -5986,7 +5627,7 @@ w	Writes on the value
 
 
 --
--- Data for Name: amoppurpose; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: amoppurpose; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.amoppurpose (amoppurpose, access_method_operator_purpose) FROM stdin;
@@ -5996,7 +5637,7 @@ o	Ordering
 
 
 --
--- Data for Name: amtype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: amtype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.amtype (amtype, access_method_type) FROM stdin;
@@ -6006,7 +5647,7 @@ i	Index
 
 
 --
--- Data for Name: attalign; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: attalign; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.attalign (attalign, attribute_alignment) FROM stdin;
@@ -6018,7 +5659,7 @@ d	Double alignment (8 bytes on most machines)
 
 
 --
--- Data for Name: attcompression; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: attcompression; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.attcompression (attcompression, attribute_compression) FROM stdin;
@@ -6029,7 +5670,7 @@ l	LZ4
 
 
 --
--- Data for Name: attgenerated; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: attgenerated; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.attgenerated (attgenerated, generated) FROM stdin;
@@ -6039,7 +5680,7 @@ s	Stored
 
 
 --
--- Data for Name: attidentity; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: attidentity; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.attidentity (attidentity, identity) FROM stdin;
@@ -6050,7 +5691,7 @@ d	by Default
 
 
 --
--- Data for Name: attstorage; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: attstorage; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.attstorage (attstorage, attribute_storage, attribute_storage_notes) FROM stdin;
@@ -6062,7 +5703,7 @@ x	Extended	Values can be compressed and/or moved to a secondary relation.
 
 
 --
--- Data for Name: castcontext; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: castcontext; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.castcontext (castcontext, cast_context) FROM stdin;
@@ -6073,7 +5714,7 @@ i	Implicit
 
 
 --
--- Data for Name: castmethod; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: castmethod; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.castmethod (castmethod, cast_method) FROM stdin;
@@ -6084,7 +5725,7 @@ i	Input/Output Functions
 
 
 --
--- Data for Name: collprovider; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: collprovider; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.collprovider (collprovider, collation_provider) FROM stdin;
@@ -6095,7 +5736,7 @@ i	icu
 
 
 --
--- Data for Name: comment_targets; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: comment_targets; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.comment_targets (comment_target_type) FROM stdin;
@@ -6145,7 +5786,7 @@ VIEW
 
 
 --
--- Data for Name: confdeltype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: confdeltype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.confdeltype (confdeltype, foreign_key_deletion_type) FROM stdin;
@@ -6158,7 +5799,7 @@ d	Set default
 
 
 --
--- Data for Name: confmatchtype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: confmatchtype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.confmatchtype (confmatchtype, foreign_key_match_type) FROM stdin;
@@ -6169,7 +5810,7 @@ s	Simple
 
 
 --
--- Data for Name: confupdtype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: confupdtype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.confupdtype (confupdtype, foreign_key_update_type) FROM stdin;
@@ -6182,7 +5823,7 @@ d	Set default
 
 
 --
--- Data for Name: contype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: contype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.contype (contype, constraint_type) FROM stdin;
@@ -6196,7 +5837,7 @@ x	Exclusion
 
 
 --
--- Data for Name: datlocprovider; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: datlocprovider; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.datlocprovider (datlocprovider, locale_provider) FROM stdin;
@@ -6206,7 +5847,7 @@ i	icu
 
 
 --
--- Data for Name: defaclobjtype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: defaclobjtype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.defaclobjtype (defaclobjtype, object_type) FROM stdin;
@@ -6219,7 +5860,7 @@ n	Schema
 
 
 --
--- Data for Name: deptype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: deptype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.deptype (deptype, dependency_type) FROM stdin;
@@ -6234,7 +5875,7 @@ x	DEPENDENCY_AUTO_EXTENSION
 
 
 --
--- Data for Name: error_class; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: error_class; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.error_class (error_class, error_class_name) FROM stdin;
@@ -6285,7 +5926,7 @@ XX	Internal Error
 
 
 --
--- Data for Name: error_code; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: error_code; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.error_code (error_class, error_code, condition_name) FROM stdin;
@@ -6553,7 +6194,7 @@ XX	XX002	index_corrupted
 
 
 --
--- Data for Name: ev_enabled; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: ev_enabled; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.ev_enabled (ev_enabled, enabling_event_mode) FROM stdin;
@@ -6565,7 +6206,7 @@ A	Always
 
 
 --
--- Data for Name: ev_type; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: ev_type; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.ev_type (ev_type, event_type) FROM stdin;
@@ -6577,7 +6218,7 @@ COPY meta_lookup.ev_type (ev_type, event_type) FROM stdin;
 
 
 --
--- Data for Name: evtenabled; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: evtenabled; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.evtenabled (evtenabled, enabling_event_mode) FROM stdin;
@@ -6589,7 +6230,7 @@ A	Always
 
 
 --
--- Data for Name: lock_conflicts; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: lock_conflicts; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.lock_conflicts (lock_level, current_lock_mode, conflicting_request) FROM stdin;
@@ -6645,7 +6286,7 @@ Row	FOR UPDATE	FOR UPDATE
 
 
 --
--- Data for Name: lock_level; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: lock_level; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.lock_level (lock_level) FROM stdin;
@@ -6656,7 +6297,7 @@ Page
 
 
 --
--- Data for Name: lock_mode; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: lock_mode; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.lock_mode (lock_level, lock_mode, alternate_mode_name) FROM stdin;
@@ -6676,7 +6317,7 @@ Row	FOR KEY SHARE	\N
 
 
 --
--- Data for Name: message_level; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: message_level; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.message_level (message_level) FROM stdin;
@@ -6690,7 +6331,7 @@ EXCEPTION
 
 
 --
--- Data for Name: oprkind; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: oprkind; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.oprkind (oprkind, operator_kind) FROM stdin;
@@ -6700,7 +6341,7 @@ l	Left
 
 
 --
--- Data for Name: partstrat; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: partstrat; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.partstrat (partstrat, partitioning_strategy) FROM stdin;
@@ -6711,7 +6352,7 @@ r	Range
 
 
 --
--- Data for Name: polcmd; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: polcmd; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.polcmd (polcmd, policy_command_type) FROM stdin;
@@ -6724,7 +6365,7 @@ d	DELETE
 
 
 --
--- Data for Name: privtype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: privtype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.privtype (privtype, initial_privilege_creator) FROM stdin;
@@ -6734,7 +6375,7 @@ e	CREATE EXTENSION
 
 
 --
--- Data for Name: proargmode; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: proargmode; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.proargmode (proargmode, procedure_argument_mode) FROM stdin;
@@ -6747,7 +6388,7 @@ t	TABLE
 
 
 --
--- Data for Name: prokind; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: prokind; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.prokind (prokind, procedure_kind) FROM stdin;
@@ -6759,7 +6400,7 @@ w	Window Function
 
 
 --
--- Data for Name: proparallel; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: proparallel; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.proparallel (proparallel, parallel_safety) FROM stdin;
@@ -6770,7 +6411,7 @@ u	Unsafe
 
 
 --
--- Data for Name: provolatile; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: provolatile; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.provolatile (provolatile, volatility) FROM stdin;
@@ -6781,7 +6422,7 @@ v	Volatile
 
 
 --
--- Data for Name: relkind; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: relkind; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.relkind (relkind, relation_type) FROM stdin;
@@ -6799,7 +6440,7 @@ r	Table
 
 
 --
--- Data for Name: relpersistence; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: relpersistence; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.relpersistence (relpersistence, relation_persistence) FROM stdin;
@@ -6810,7 +6451,7 @@ t	Temporary table/sequence
 
 
 --
--- Data for Name: relreplident; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: relreplident; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.relreplident (relreplident, relation_persistence) FROM stdin;
@@ -6822,7 +6463,7 @@ i	Index with "indisreplident" set
 
 
 --
--- Data for Name: srsubstate; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: srsubstate; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.srsubstate (srsubstate, subscribed_relation_state) FROM stdin;
@@ -6835,7 +6476,7 @@ r	Ready (normal replication)
 
 
 --
--- Data for Name: substream; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: substream; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.substream (substream, substream_policy) FROM stdin;
@@ -6846,7 +6487,7 @@ p	Apply changes directly using a parallel apply worker if available.
 
 
 --
--- Data for Name: subtwophasestate; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: subtwophasestate; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.subtwophasestate (subtwophasestate, two_phase_mode_state) FROM stdin;
@@ -6857,7 +6498,7 @@ a	Enabled
 
 
 --
--- Data for Name: tgenabled; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: tgenabled; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.tgenabled (tgenabled, trigger_enabled_condition) FROM stdin;
@@ -6869,7 +6510,7 @@ O	Origin or Local Mode Only
 
 
 --
--- Data for Name: typalign; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: typalign; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.typalign (typalign, type_alignment) FROM stdin;
@@ -6881,7 +6522,7 @@ d	Double alignment (8 bytes on most machines)
 
 
 --
--- Data for Name: typcategory; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: typcategory; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.typcategory (typcategory, type_category) FROM stdin;
@@ -6905,7 +6546,7 @@ Z	Internal-use
 
 
 --
--- Data for Name: typstorage; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: typstorage; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.typstorage (typstorage, type_storage, type_storage_notes) FROM stdin;
@@ -6917,7 +6558,7 @@ x	Extended	Values can be compressed and/or moved to a secondary relation.
 
 
 --
--- Data for Name: typtype; Type: TABLE DATA; Schema: meta_lookup; Owner: -
+-- Data for Name: typtype; Type: TABLE DATA; Schema: meta_lookup; Owner: ray
 --
 
 COPY meta_lookup.typtype (typtype, type_type) FROM stdin;
@@ -6932,7 +6573,7 @@ m	Multirange
 
 
 --
--- Data for Name: privilege_type; Type: TABLE DATA; Schema: security_lookup; Owner: -
+-- Data for Name: privilege_type; Type: TABLE DATA; Schema: security_lookup; Owner: ray
 --
 
 COPY security_lookup.privilege_type (privilege_type, privilege_code) FROM stdin;
@@ -6940,7 +6581,7 @@ COPY security_lookup.privilege_type (privilege_type, privilege_code) FROM stdin;
 
 
 --
--- Data for Name: system_privilege_type; Type: TABLE DATA; Schema: security_lookup; Owner: -
+-- Data for Name: system_privilege_type; Type: TABLE DATA; Schema: security_lookup; Owner: ray
 --
 
 COPY security_lookup.system_privilege_type (system_privilege_type) FROM stdin;
@@ -6948,7 +6589,7 @@ COPY security_lookup.system_privilege_type (system_privilege_type) FROM stdin;
 
 
 --
--- Data for Name: valid_object_privileges; Type: TABLE DATA; Schema: security_lookup; Owner: -
+-- Data for Name: valid_object_privileges; Type: TABLE DATA; Schema: security_lookup; Owner: ray
 --
 
 COPY security_lookup.valid_object_privileges (object_type, privilege_type) FROM stdin;
@@ -6956,7 +6597,7 @@ COPY security_lookup.valid_object_privileges (object_type, privilege_type) FROM 
 
 
 --
--- Data for Name: copy; Type: TABLE DATA; Schema: update; Owner: -
+-- Data for Name: copy; Type: TABLE DATA; Schema: update; Owner: ray
 --
 
 COPY update.copy (source_id, source_schema, source_relation, target_schema, target_table, max_age) FROM stdin;
@@ -6964,7 +6605,7 @@ COPY update.copy (source_id, source_schema, source_relation, target_schema, targ
 
 
 --
--- Data for Name: refresh_sequence; Type: TABLE DATA; Schema: update; Owner: -
+-- Data for Name: refresh_sequence; Type: TABLE DATA; Schema: update; Owner: ray
 --
 
 COPY update.refresh_sequence (refresh_id, view_group, ordinality, view_schema, view_name) FROM stdin;
@@ -6972,21 +6613,21 @@ COPY update.refresh_sequence (refresh_id, view_group, ordinality, view_schema, v
 
 
 --
--- Name: refresh_sequence_2_refresh_id_seq; Type: SEQUENCE SET; Schema: update; Owner: -
+-- Name: refresh_sequence_2_refresh_id_seq; Type: SEQUENCE SET; Schema: update; Owner: ray
 --
 
 SELECT pg_catalog.setval('update.refresh_sequence_2_refresh_id_seq', 1, false);
 
 
 --
--- Name: source_source_id_seq; Type: SEQUENCE SET; Schema: update; Owner: -
+-- Name: source_source_id_seq; Type: SEQUENCE SET; Schema: update; Owner: ray
 --
 
 SELECT pg_catalog.setval('update.source_source_id_seq', 1, false);
 
 
 --
--- Name: view_key_fields view_key_fields_pkey; Type: CONSTRAINT; Schema: meta; Owner: -
+-- Name: view_key_fields view_key_fields_pkey; Type: CONSTRAINT; Schema: meta; Owner: ray
 --
 
 ALTER TABLE ONLY meta.view_key_fields
@@ -6994,7 +6635,7 @@ ALTER TABLE ONLY meta.view_key_fields
 
 
 --
--- Name: view_keys view_keys_pkey; Type: CONSTRAINT; Schema: meta; Owner: -
+-- Name: view_keys view_keys_pkey; Type: CONSTRAINT; Schema: meta; Owner: ray
 --
 
 ALTER TABLE ONLY meta.view_keys
@@ -7002,7 +6643,7 @@ ALTER TABLE ONLY meta.view_keys
 
 
 --
--- Name: aggfinalmodify aggfinalmodify_aggregate_transition_state_modification_poli_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: aggfinalmodify aggfinalmodify_aggregate_transition_state_modification_poli_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.aggfinalmodify
@@ -7010,7 +6651,7 @@ ALTER TABLE ONLY meta_lookup.aggfinalmodify
 
 
 --
--- Name: aggfinalmodify aggfinalmodify_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: aggfinalmodify aggfinalmodify_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.aggfinalmodify
@@ -7018,7 +6659,7 @@ ALTER TABLE ONLY meta_lookup.aggfinalmodify
 
 
 --
--- Name: aggkind aggkind_aggregate_kind_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: aggkind aggkind_aggregate_kind_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.aggkind
@@ -7026,7 +6667,7 @@ ALTER TABLE ONLY meta_lookup.aggkind
 
 
 --
--- Name: aggkind aggkind_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: aggkind aggkind_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.aggkind
@@ -7034,7 +6675,7 @@ ALTER TABLE ONLY meta_lookup.aggkind
 
 
 --
--- Name: aggmfinalmodify aggmfinalmodify_aggregate_transition_state_modification_pol_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: aggmfinalmodify aggmfinalmodify_aggregate_transition_state_modification_pol_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.aggmfinalmodify
@@ -7042,7 +6683,7 @@ ALTER TABLE ONLY meta_lookup.aggmfinalmodify
 
 
 --
--- Name: aggmfinalmodify aggmfinalmodify_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: aggmfinalmodify aggmfinalmodify_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.aggmfinalmodify
@@ -7050,7 +6691,7 @@ ALTER TABLE ONLY meta_lookup.aggmfinalmodify
 
 
 --
--- Name: amoppurpose amoppurpose_access_method_operator_purpose_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: amoppurpose amoppurpose_access_method_operator_purpose_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.amoppurpose
@@ -7058,7 +6699,7 @@ ALTER TABLE ONLY meta_lookup.amoppurpose
 
 
 --
--- Name: amoppurpose amoppurpose_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: amoppurpose amoppurpose_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.amoppurpose
@@ -7066,7 +6707,7 @@ ALTER TABLE ONLY meta_lookup.amoppurpose
 
 
 --
--- Name: amtype amtype_access_method_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: amtype amtype_access_method_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.amtype
@@ -7074,7 +6715,7 @@ ALTER TABLE ONLY meta_lookup.amtype
 
 
 --
--- Name: amtype amtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: amtype amtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.amtype
@@ -7082,7 +6723,7 @@ ALTER TABLE ONLY meta_lookup.amtype
 
 
 --
--- Name: attalign attalign_attribute_alignment_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attalign attalign_attribute_alignment_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attalign
@@ -7090,7 +6731,7 @@ ALTER TABLE ONLY meta_lookup.attalign
 
 
 --
--- Name: attalign attalign_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attalign attalign_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attalign
@@ -7098,7 +6739,7 @@ ALTER TABLE ONLY meta_lookup.attalign
 
 
 --
--- Name: attcompression attcompression_attribute_compression_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attcompression attcompression_attribute_compression_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attcompression
@@ -7106,7 +6747,7 @@ ALTER TABLE ONLY meta_lookup.attcompression
 
 
 --
--- Name: attcompression attcompression_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attcompression attcompression_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attcompression
@@ -7114,7 +6755,7 @@ ALTER TABLE ONLY meta_lookup.attcompression
 
 
 --
--- Name: attgenerated attgenerated_generated_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attgenerated attgenerated_generated_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attgenerated
@@ -7122,7 +6763,7 @@ ALTER TABLE ONLY meta_lookup.attgenerated
 
 
 --
--- Name: attgenerated attgenerated_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attgenerated attgenerated_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attgenerated
@@ -7130,7 +6771,7 @@ ALTER TABLE ONLY meta_lookup.attgenerated
 
 
 --
--- Name: attidentity attidentity_identity_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attidentity attidentity_identity_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attidentity
@@ -7138,7 +6779,7 @@ ALTER TABLE ONLY meta_lookup.attidentity
 
 
 --
--- Name: attidentity attidentity_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attidentity attidentity_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attidentity
@@ -7146,7 +6787,7 @@ ALTER TABLE ONLY meta_lookup.attidentity
 
 
 --
--- Name: attstorage attstorage_attribute_storage_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attstorage attstorage_attribute_storage_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attstorage
@@ -7154,7 +6795,7 @@ ALTER TABLE ONLY meta_lookup.attstorage
 
 
 --
--- Name: attstorage attstorage_attribute_storage_notes_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attstorage attstorage_attribute_storage_notes_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attstorage
@@ -7162,7 +6803,7 @@ ALTER TABLE ONLY meta_lookup.attstorage
 
 
 --
--- Name: attstorage attstorage_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: attstorage attstorage_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.attstorage
@@ -7170,7 +6811,7 @@ ALTER TABLE ONLY meta_lookup.attstorage
 
 
 --
--- Name: castcontext castcontext_cast_context_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: castcontext castcontext_cast_context_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.castcontext
@@ -7178,7 +6819,7 @@ ALTER TABLE ONLY meta_lookup.castcontext
 
 
 --
--- Name: castcontext castcontext_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: castcontext castcontext_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.castcontext
@@ -7186,7 +6827,7 @@ ALTER TABLE ONLY meta_lookup.castcontext
 
 
 --
--- Name: castmethod castmethod_cast_method_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: castmethod castmethod_cast_method_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.castmethod
@@ -7194,7 +6835,7 @@ ALTER TABLE ONLY meta_lookup.castmethod
 
 
 --
--- Name: castmethod castmethod_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: castmethod castmethod_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.castmethod
@@ -7202,7 +6843,7 @@ ALTER TABLE ONLY meta_lookup.castmethod
 
 
 --
--- Name: collprovider collprovider_collation_provider_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: collprovider collprovider_collation_provider_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.collprovider
@@ -7210,7 +6851,7 @@ ALTER TABLE ONLY meta_lookup.collprovider
 
 
 --
--- Name: collprovider collprovider_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: collprovider collprovider_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.collprovider
@@ -7218,7 +6859,7 @@ ALTER TABLE ONLY meta_lookup.collprovider
 
 
 --
--- Name: comment_targets comment_targets_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: comment_targets comment_targets_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.comment_targets
@@ -7226,7 +6867,7 @@ ALTER TABLE ONLY meta_lookup.comment_targets
 
 
 --
--- Name: confdeltype confdeltype_foreign_key_deletion_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: confdeltype confdeltype_foreign_key_deletion_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.confdeltype
@@ -7234,7 +6875,7 @@ ALTER TABLE ONLY meta_lookup.confdeltype
 
 
 --
--- Name: confdeltype confdeltype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: confdeltype confdeltype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.confdeltype
@@ -7242,7 +6883,7 @@ ALTER TABLE ONLY meta_lookup.confdeltype
 
 
 --
--- Name: confmatchtype confmatchtype_foreign_key_match_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: confmatchtype confmatchtype_foreign_key_match_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.confmatchtype
@@ -7250,7 +6891,7 @@ ALTER TABLE ONLY meta_lookup.confmatchtype
 
 
 --
--- Name: confmatchtype confmatchtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: confmatchtype confmatchtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.confmatchtype
@@ -7258,7 +6899,7 @@ ALTER TABLE ONLY meta_lookup.confmatchtype
 
 
 --
--- Name: confupdtype confupdtype_foreign_key_update_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: confupdtype confupdtype_foreign_key_update_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.confupdtype
@@ -7266,7 +6907,7 @@ ALTER TABLE ONLY meta_lookup.confupdtype
 
 
 --
--- Name: confupdtype confupdtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: confupdtype confupdtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.confupdtype
@@ -7274,7 +6915,7 @@ ALTER TABLE ONLY meta_lookup.confupdtype
 
 
 --
--- Name: contype constraint_type_constraint_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: contype constraint_type_constraint_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.contype
@@ -7282,7 +6923,7 @@ ALTER TABLE ONLY meta_lookup.contype
 
 
 --
--- Name: contype constraint_type_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: contype constraint_type_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.contype
@@ -7290,7 +6931,7 @@ ALTER TABLE ONLY meta_lookup.contype
 
 
 --
--- Name: datlocprovider datlocprovider_locale_provider_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: datlocprovider datlocprovider_locale_provider_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.datlocprovider
@@ -7298,7 +6939,7 @@ ALTER TABLE ONLY meta_lookup.datlocprovider
 
 
 --
--- Name: datlocprovider datlocprovider_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: datlocprovider datlocprovider_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.datlocprovider
@@ -7306,7 +6947,7 @@ ALTER TABLE ONLY meta_lookup.datlocprovider
 
 
 --
--- Name: defaclobjtype defaclobjtype_object_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: defaclobjtype defaclobjtype_object_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.defaclobjtype
@@ -7314,7 +6955,7 @@ ALTER TABLE ONLY meta_lookup.defaclobjtype
 
 
 --
--- Name: defaclobjtype defaclobjtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: defaclobjtype defaclobjtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.defaclobjtype
@@ -7322,7 +6963,7 @@ ALTER TABLE ONLY meta_lookup.defaclobjtype
 
 
 --
--- Name: deptype deptype_dependency_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: deptype deptype_dependency_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.deptype
@@ -7330,7 +6971,7 @@ ALTER TABLE ONLY meta_lookup.deptype
 
 
 --
--- Name: deptype deptype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: deptype deptype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.deptype
@@ -7338,7 +6979,7 @@ ALTER TABLE ONLY meta_lookup.deptype
 
 
 --
--- Name: error_class error_class_error_class_name_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: error_class error_class_error_class_name_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.error_class
@@ -7346,7 +6987,7 @@ ALTER TABLE ONLY meta_lookup.error_class
 
 
 --
--- Name: error_class error_class_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: error_class error_class_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.error_class
@@ -7354,7 +6995,7 @@ ALTER TABLE ONLY meta_lookup.error_class
 
 
 --
--- Name: error_code error_code_error_code_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: error_code error_code_error_code_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.error_code
@@ -7362,7 +7003,7 @@ ALTER TABLE ONLY meta_lookup.error_code
 
 
 --
--- Name: error_code error_code_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: error_code error_code_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.error_code
@@ -7370,7 +7011,7 @@ ALTER TABLE ONLY meta_lookup.error_code
 
 
 --
--- Name: ev_enabled ev_enabled_enabling_event_mode_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: ev_enabled ev_enabled_enabling_event_mode_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.ev_enabled
@@ -7378,7 +7019,7 @@ ALTER TABLE ONLY meta_lookup.ev_enabled
 
 
 --
--- Name: ev_enabled ev_enabled_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: ev_enabled ev_enabled_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.ev_enabled
@@ -7386,7 +7027,7 @@ ALTER TABLE ONLY meta_lookup.ev_enabled
 
 
 --
--- Name: ev_type ev_type_event_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: ev_type ev_type_event_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.ev_type
@@ -7394,7 +7035,7 @@ ALTER TABLE ONLY meta_lookup.ev_type
 
 
 --
--- Name: ev_type ev_type_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: ev_type ev_type_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.ev_type
@@ -7402,7 +7043,7 @@ ALTER TABLE ONLY meta_lookup.ev_type
 
 
 --
--- Name: evtenabled evtenabled_enabling_event_mode_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: evtenabled evtenabled_enabling_event_mode_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.evtenabled
@@ -7410,7 +7051,7 @@ ALTER TABLE ONLY meta_lookup.evtenabled
 
 
 --
--- Name: evtenabled evtenabled_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: evtenabled evtenabled_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.evtenabled
@@ -7418,7 +7059,7 @@ ALTER TABLE ONLY meta_lookup.evtenabled
 
 
 --
--- Name: lock_conflicts lock_conflicts_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: lock_conflicts lock_conflicts_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.lock_conflicts
@@ -7426,7 +7067,7 @@ ALTER TABLE ONLY meta_lookup.lock_conflicts
 
 
 --
--- Name: lock_level lock_level_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: lock_level lock_level_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.lock_level
@@ -7434,7 +7075,7 @@ ALTER TABLE ONLY meta_lookup.lock_level
 
 
 --
--- Name: lock_mode lock_mode_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: lock_mode lock_mode_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.lock_mode
@@ -7442,7 +7083,7 @@ ALTER TABLE ONLY meta_lookup.lock_mode
 
 
 --
--- Name: message_level message_level_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: message_level message_level_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.message_level
@@ -7450,7 +7091,7 @@ ALTER TABLE ONLY meta_lookup.message_level
 
 
 --
--- Name: oprkind oprkind_operator_kind_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: oprkind oprkind_operator_kind_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.oprkind
@@ -7458,7 +7099,7 @@ ALTER TABLE ONLY meta_lookup.oprkind
 
 
 --
--- Name: oprkind oprkind_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: oprkind oprkind_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.oprkind
@@ -7466,7 +7107,7 @@ ALTER TABLE ONLY meta_lookup.oprkind
 
 
 --
--- Name: partstrat partstrat_partitioning_strategy_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: partstrat partstrat_partitioning_strategy_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.partstrat
@@ -7474,7 +7115,7 @@ ALTER TABLE ONLY meta_lookup.partstrat
 
 
 --
--- Name: partstrat partstrat_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: partstrat partstrat_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.partstrat
@@ -7482,7 +7123,7 @@ ALTER TABLE ONLY meta_lookup.partstrat
 
 
 --
--- Name: polcmd polcmd_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: polcmd polcmd_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.polcmd
@@ -7490,7 +7131,7 @@ ALTER TABLE ONLY meta_lookup.polcmd
 
 
 --
--- Name: polcmd polcmd_policy_command_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: polcmd polcmd_policy_command_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.polcmd
@@ -7498,7 +7139,7 @@ ALTER TABLE ONLY meta_lookup.polcmd
 
 
 --
--- Name: privtype privtype_initial_privilege_creator_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: privtype privtype_initial_privilege_creator_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.privtype
@@ -7506,7 +7147,7 @@ ALTER TABLE ONLY meta_lookup.privtype
 
 
 --
--- Name: privtype privtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: privtype privtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.privtype
@@ -7514,7 +7155,7 @@ ALTER TABLE ONLY meta_lookup.privtype
 
 
 --
--- Name: proargmode proargmode_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: proargmode proargmode_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.proargmode
@@ -7522,7 +7163,7 @@ ALTER TABLE ONLY meta_lookup.proargmode
 
 
 --
--- Name: proargmode proargmode_procedure_argument_mode_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: proargmode proargmode_procedure_argument_mode_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.proargmode
@@ -7530,7 +7171,7 @@ ALTER TABLE ONLY meta_lookup.proargmode
 
 
 --
--- Name: prokind prokind_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: prokind prokind_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.prokind
@@ -7538,7 +7179,7 @@ ALTER TABLE ONLY meta_lookup.prokind
 
 
 --
--- Name: prokind prokind_procedure_kind_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: prokind prokind_procedure_kind_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.prokind
@@ -7546,7 +7187,7 @@ ALTER TABLE ONLY meta_lookup.prokind
 
 
 --
--- Name: proparallel proparallel_parallel_safety_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: proparallel proparallel_parallel_safety_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.proparallel
@@ -7554,7 +7195,7 @@ ALTER TABLE ONLY meta_lookup.proparallel
 
 
 --
--- Name: proparallel proparallel_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: proparallel proparallel_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.proparallel
@@ -7562,7 +7203,7 @@ ALTER TABLE ONLY meta_lookup.proparallel
 
 
 --
--- Name: provolatile provolatile_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: provolatile provolatile_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.provolatile
@@ -7570,7 +7211,7 @@ ALTER TABLE ONLY meta_lookup.provolatile
 
 
 --
--- Name: provolatile provolatile_volatility_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: provolatile provolatile_volatility_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.provolatile
@@ -7578,7 +7219,7 @@ ALTER TABLE ONLY meta_lookup.provolatile
 
 
 --
--- Name: relkind relkind_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: relkind relkind_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.relkind
@@ -7586,7 +7227,7 @@ ALTER TABLE ONLY meta_lookup.relkind
 
 
 --
--- Name: relkind relkind_relkind_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: relkind relkind_relkind_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.relkind
@@ -7594,7 +7235,7 @@ ALTER TABLE ONLY meta_lookup.relkind
 
 
 --
--- Name: relpersistence relpersistence_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: relpersistence relpersistence_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.relpersistence
@@ -7602,7 +7243,7 @@ ALTER TABLE ONLY meta_lookup.relpersistence
 
 
 --
--- Name: relpersistence relpersistence_relation_persistence_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: relpersistence relpersistence_relation_persistence_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.relpersistence
@@ -7610,7 +7251,7 @@ ALTER TABLE ONLY meta_lookup.relpersistence
 
 
 --
--- Name: relreplident relreplident_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: relreplident relreplident_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.relreplident
@@ -7618,7 +7259,7 @@ ALTER TABLE ONLY meta_lookup.relreplident
 
 
 --
--- Name: relreplident relreplident_relation_persistence_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: relreplident relreplident_relation_persistence_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.relreplident
@@ -7626,7 +7267,7 @@ ALTER TABLE ONLY meta_lookup.relreplident
 
 
 --
--- Name: srsubstate srsubstate_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: srsubstate srsubstate_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.srsubstate
@@ -7634,7 +7275,7 @@ ALTER TABLE ONLY meta_lookup.srsubstate
 
 
 --
--- Name: srsubstate srsubstate_subscribed_relation_state_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: srsubstate srsubstate_subscribed_relation_state_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.srsubstate
@@ -7642,7 +7283,7 @@ ALTER TABLE ONLY meta_lookup.srsubstate
 
 
 --
--- Name: substream substream_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: substream substream_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.substream
@@ -7650,7 +7291,7 @@ ALTER TABLE ONLY meta_lookup.substream
 
 
 --
--- Name: substream substream_substream_policy_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: substream substream_substream_policy_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.substream
@@ -7658,7 +7299,7 @@ ALTER TABLE ONLY meta_lookup.substream
 
 
 --
--- Name: subtwophasestate subtwophasestate_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: subtwophasestate subtwophasestate_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.subtwophasestate
@@ -7666,7 +7307,7 @@ ALTER TABLE ONLY meta_lookup.subtwophasestate
 
 
 --
--- Name: subtwophasestate subtwophasestate_two_phase_mode_state_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: subtwophasestate subtwophasestate_two_phase_mode_state_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.subtwophasestate
@@ -7674,7 +7315,7 @@ ALTER TABLE ONLY meta_lookup.subtwophasestate
 
 
 --
--- Name: tgenabled trigger_enabled_conditions_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: tgenabled trigger_enabled_conditions_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.tgenabled
@@ -7682,7 +7323,7 @@ ALTER TABLE ONLY meta_lookup.tgenabled
 
 
 --
--- Name: tgenabled trigger_enabled_conditions_trigger_enabled_condition_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: tgenabled trigger_enabled_conditions_trigger_enabled_condition_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.tgenabled
@@ -7690,7 +7331,7 @@ ALTER TABLE ONLY meta_lookup.tgenabled
 
 
 --
--- Name: typalign typalign_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: typalign typalign_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.typalign
@@ -7698,7 +7339,7 @@ ALTER TABLE ONLY meta_lookup.typalign
 
 
 --
--- Name: typalign typalign_type_alignment_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: typalign typalign_type_alignment_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.typalign
@@ -7706,7 +7347,7 @@ ALTER TABLE ONLY meta_lookup.typalign
 
 
 --
--- Name: typcategory typcategory_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: typcategory typcategory_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.typcategory
@@ -7714,7 +7355,7 @@ ALTER TABLE ONLY meta_lookup.typcategory
 
 
 --
--- Name: typstorage typstorage_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: typstorage typstorage_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.typstorage
@@ -7722,7 +7363,7 @@ ALTER TABLE ONLY meta_lookup.typstorage
 
 
 --
--- Name: typstorage typstorage_type_storage_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: typstorage typstorage_type_storage_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.typstorage
@@ -7730,7 +7371,7 @@ ALTER TABLE ONLY meta_lookup.typstorage
 
 
 --
--- Name: typstorage typstorage_type_storage_notes_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: typstorage typstorage_type_storage_notes_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.typstorage
@@ -7738,7 +7379,7 @@ ALTER TABLE ONLY meta_lookup.typstorage
 
 
 --
--- Name: typtype typtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: typtype typtype_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.typtype
@@ -7746,7 +7387,7 @@ ALTER TABLE ONLY meta_lookup.typtype
 
 
 --
--- Name: typtype typtype_type_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: typtype typtype_type_type_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.typtype
@@ -7754,7 +7395,7 @@ ALTER TABLE ONLY meta_lookup.typtype
 
 
 --
--- Name: privilege_type privilege_type_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: privilege_type privilege_type_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY security_lookup.privilege_type
@@ -7762,7 +7403,7 @@ ALTER TABLE ONLY security_lookup.privilege_type
 
 
 --
--- Name: privilege_type privilege_type_privilege_code_key; Type: CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: privilege_type privilege_type_privilege_code_key; Type: CONSTRAINT; Schema: security_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY security_lookup.privilege_type
@@ -7770,7 +7411,7 @@ ALTER TABLE ONLY security_lookup.privilege_type
 
 
 --
--- Name: system_privilege_type system_privilege_type_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: system_privilege_type system_privilege_type_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY security_lookup.system_privilege_type
@@ -7778,7 +7419,7 @@ ALTER TABLE ONLY security_lookup.system_privilege_type
 
 
 --
--- Name: valid_object_privileges valid_object_privileges_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: valid_object_privileges valid_object_privileges_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY security_lookup.valid_object_privileges
@@ -7786,7 +7427,7 @@ ALTER TABLE ONLY security_lookup.valid_object_privileges
 
 
 --
--- Name: refresh_sequence refresh_sequence_2_pkey1; Type: CONSTRAINT; Schema: update; Owner: -
+-- Name: refresh_sequence refresh_sequence_2_pkey1; Type: CONSTRAINT; Schema: update; Owner: ray
 --
 
 ALTER TABLE ONLY update.refresh_sequence
@@ -7794,7 +7435,7 @@ ALTER TABLE ONLY update.refresh_sequence
 
 
 --
--- Name: refresh_sequence refresh_sequence_2_view_group_ordinality_key1; Type: CONSTRAINT; Schema: update; Owner: -
+-- Name: refresh_sequence refresh_sequence_2_view_group_ordinality_key1; Type: CONSTRAINT; Schema: update; Owner: ray
 --
 
 ALTER TABLE ONLY update.refresh_sequence
@@ -7802,7 +7443,7 @@ ALTER TABLE ONLY update.refresh_sequence
 
 
 --
--- Name: refresh_sequence refresh_sequence_2_view_group_view_schema_view_name_key; Type: CONSTRAINT; Schema: update; Owner: -
+-- Name: refresh_sequence refresh_sequence_2_view_group_view_schema_view_name_key; Type: CONSTRAINT; Schema: update; Owner: ray
 --
 
 ALTER TABLE ONLY update.refresh_sequence
@@ -7810,7 +7451,7 @@ ALTER TABLE ONLY update.refresh_sequence
 
 
 --
--- Name: copy source_pkey; Type: CONSTRAINT; Schema: update; Owner: -
+-- Name: copy source_pkey; Type: CONSTRAINT; Schema: update; Owner: ray
 --
 
 ALTER TABLE ONLY update.copy
@@ -7818,7 +7459,7 @@ ALTER TABLE ONLY update.copy
 
 
 --
--- Name: copy source_target_schema_target_table_key; Type: CONSTRAINT; Schema: update; Owner: -
+-- Name: copy source_target_schema_target_table_key; Type: CONSTRAINT; Schema: update; Owner: ray
 --
 
 ALTER TABLE ONLY update.copy
@@ -7826,42 +7467,42 @@ ALTER TABLE ONLY update.copy
 
 
 --
--- Name: search_path search_path_delete; Type: TRIGGER; Schema: meta; Owner: -
+-- Name: search_path search_path_delete; Type: TRIGGER; Schema: meta; Owner: ray
 --
 
 CREATE TRIGGER search_path_delete INSTEAD OF DELETE ON meta.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.delete_from_search_path_trigger();
 
 
 --
--- Name: search_path search_path_insert; Type: TRIGGER; Schema: meta; Owner: -
+-- Name: search_path search_path_insert; Type: TRIGGER; Schema: meta; Owner: ray
 --
 
 CREATE TRIGGER search_path_insert INSTEAD OF INSERT ON meta.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.push_to_search_path_trigger();
 
 
 --
--- Name: search_path search_path_update; Type: TRIGGER; Schema: meta; Owner: -
+-- Name: search_path search_path_update; Type: TRIGGER; Schema: meta; Owner: ray
 --
 
 CREATE TRIGGER search_path_update INSTEAD OF UPDATE ON meta.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.update_search_path_trigger();
 
 
 --
--- Name: view_key_fields trigger_check_field_exists; Type: TRIGGER; Schema: meta; Owner: -
+-- Name: view_key_fields trigger_check_field_exists; Type: TRIGGER; Schema: meta; Owner: ray
 --
 
 CREATE TRIGGER trigger_check_field_exists BEFORE INSERT OR UPDATE ON meta.view_key_fields FOR EACH ROW EXECUTE FUNCTION rule_0.named_field_must_exist_tg();
 
 
 --
--- Name: view_keys trigger_check_named_view_is_a_view; Type: TRIGGER; Schema: meta; Owner: -
+-- Name: view_keys trigger_check_named_view_is_a_view; Type: TRIGGER; Schema: meta; Owner: ray
 --
 
 CREATE TRIGGER trigger_check_named_view_is_a_view BEFORE INSERT OR UPDATE ON meta.view_keys FOR EACH ROW EXECUTE FUNCTION rule_0.view_name_must_be_a_view_tg();
 
 
 --
--- Name: view_key_fields view_key_fields_view_name_key_name_fkey; Type: FK CONSTRAINT; Schema: meta; Owner: -
+-- Name: view_key_fields view_key_fields_view_name_key_name_fkey; Type: FK CONSTRAINT; Schema: meta; Owner: ray
 --
 
 ALTER TABLE ONLY meta.view_key_fields
@@ -7869,7 +7510,7 @@ ALTER TABLE ONLY meta.view_key_fields
 
 
 --
--- Name: error_code error_code_error_class_fkey; Type: FK CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: error_code error_code_error_class_fkey; Type: FK CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.error_code
@@ -7877,7 +7518,7 @@ ALTER TABLE ONLY meta_lookup.error_code
 
 
 --
--- Name: lock_conflicts lock_conflicts_lock_level_conflicting_request_fkey; Type: FK CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: lock_conflicts lock_conflicts_lock_level_conflicting_request_fkey; Type: FK CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.lock_conflicts
@@ -7885,7 +7526,7 @@ ALTER TABLE ONLY meta_lookup.lock_conflicts
 
 
 --
--- Name: lock_conflicts lock_conflicts_lock_level_current_lock_mode_fkey; Type: FK CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: lock_conflicts lock_conflicts_lock_level_current_lock_mode_fkey; Type: FK CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.lock_conflicts
@@ -7893,7 +7534,7 @@ ALTER TABLE ONLY meta_lookup.lock_conflicts
 
 
 --
--- Name: lock_mode lock_mode_lock_level_fkey; Type: FK CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: lock_mode lock_mode_lock_level_fkey; Type: FK CONSTRAINT; Schema: meta_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY meta_lookup.lock_mode
@@ -7901,7 +7542,7 @@ ALTER TABLE ONLY meta_lookup.lock_mode
 
 
 --
--- Name: valid_object_privileges valid_object_privileges_privilege_type_fkey; Type: FK CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: valid_object_privileges valid_object_privileges_privilege_type_fkey; Type: FK CONSTRAINT; Schema: security_lookup; Owner: ray
 --
 
 ALTER TABLE ONLY security_lookup.valid_object_privileges
