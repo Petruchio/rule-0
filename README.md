@@ -327,7 +327,7 @@ with a relational operation, too:
 
 ```
 rule_0=# DELETE FROM search_path WHERE schema_name ~ '^pg_';
-DELETE 0
+DELETE 2
 (1 row)
 rule_0=# SELECT * from meta.search_path ;
  ordinality |    schema_name
@@ -344,13 +344,10 @@ rule_0=# SELECT * from meta.search_path ;
 (9 rows)
 ```
 
-Other than that vexing "DELETE 0" message (which *really* needs fixed soon),
-it worked as it should.  We were able to use a regular expresion to kill two
-schemata with one stone.
-
-If you've learned to write good queries, that effort should pay off in
-administration, too.  Generality gives you more power and requires you to
-memorize fewer special commands.
+We were able to use a regular expresion to kill two schemata with one
+stone. If you've learned to write good queries, that effort should pay off
+in administration, too.  Generality gives you more power and requires you
+to memorize fewer special commands.
 
 This is the way Rule 0 should work:  the relational database can be managed
 relationally.
