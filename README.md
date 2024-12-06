@@ -31,7 +31,7 @@ databases:
 
 Rules 1 and 4 are relevant as well:
 
-### Rule 1: The foundation rule
+### Rule 1: The information rule:
 > All information in a relational data base is represented explicitly at
 > the logical level and in exactly one way – by values in tables.
 
