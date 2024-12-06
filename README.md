@@ -271,11 +271,8 @@ The Rule 0 solution is a bit easier to remember:
 
 ```
 rule_0=# INSERT INTO meta.search_path (schema_name) VALUES ('meta');
-INSERT 0 0
+INSERT 0 1
 ```
-
-(Note that the number of lines inserted is wrong.  Fixing that is on the
-agenda.)
 
 Now, checking our search path with SHOW (so that we know that the results
 aren't just seen in Rule 0), we see:
