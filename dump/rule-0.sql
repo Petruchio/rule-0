@@ -4156,12 +4156,11 @@ CREATE VIEW meta.casts AS
 --
 
 CREATE VIEW meta.column_sequences AS
- SELECT n.nspname AS schema_name,
-    t.relname AS table_name,
+ SELECT (t.relnamespace)::regnamespace AS schema_name,
+    (t.oid)::regclass AS table_name,
     a.attname AS column_name,
     s.relname AS sequence_name
-   FROM ((((pg_class t
-     JOIN pg_namespace n ON ((n.oid = t.relnamespace)))
+   FROM (((pg_class t
      JOIN pg_attribute a ON ((a.attrelid = t.oid)))
      JOIN pg_depend d ON (((d.refobjid = t.oid) AND (d.refobjsubid = a.attnum))))
      JOIN pg_class s ON ((s.oid = d.objid)))
@@ -4173,14 +4172,13 @@ CREATE VIEW meta.column_sequences AS
 --
 
 CREATE VIEW meta.columns_simple AS
- SELECT s.nspname AS schema_name,
-    c.relname AS table_name,
+ SELECT (c.relnamespace)::regnamespace AS schema_name,
+    (c.oid)::regclass AS table_name,
     a.attname AS column_name,
-    t.typname AS column_type,
+    (t.oid)::regtype AS column_type,
     col_description(c.oid, (a.attnum)::integer) AS description
-   FROM (((pg_attribute a
+   FROM ((pg_attribute a
      JOIN pg_class c ON ((a.attrelid = c.oid)))
-     JOIN pg_namespace s ON ((c.relnamespace = s.oid)))
      JOIN pg_type t ON ((a.atttypid = t.oid)))
   WHERE ((a.attnum > 0) AND (a.atttypid <> (0)::oid) AND (a.attisdropped = false));
 
@@ -4190,12 +4188,11 @@ CREATE VIEW meta.columns_simple AS
 --
 
 CREATE VIEW meta.composite_type AS
- SELECT nsp.nspname AS schema_name,
-    cl.relname AS composite_type
-   FROM (pg_class cl
-     JOIN pg_namespace nsp ON ((cl.relnamespace = nsp.oid)))
-  WHERE (cl.relkind = 'c'::"char")
-  ORDER BY nsp.nspname, cl.relname;
+ SELECT (relnamespace)::regnamespace AS schema_name,
+    relname AS composite_type
+   FROM pg_class cl
+  WHERE (relkind = 'c'::"char")
+  ORDER BY (relnamespace)::text, relname;
 
 
 --
@@ -4205,10 +4202,9 @@ CREATE VIEW meta.composite_type AS
 CREATE VIEW meta.composite_type_field AS
  WITH comp_type AS (
          SELECT cl.oid AS attrelid,
-            nsp_1.nspname AS schema_name,
+            (cl.relnamespace)::regnamespace AS schema_name,
             cl.relname AS composite_type
-           FROM (pg_class cl
-             JOIN pg_namespace nsp_1 ON ((cl.relnamespace = nsp_1.oid)))
+           FROM pg_class cl
           WHERE (cl.relkind = 'c'::"char")
         )
  SELECT ct.schema_name,
@@ -4366,21 +4362,21 @@ CREATE TABLE meta_lookup.attidentity (
 --
 
 CREATE VIEW meta.fields AS
- SELECT s.nspname AS schema_name,
+ SELECT (c.relnamespace)::regnamespace AS schema_name,
     c.relname AS relation_name,
     a.attnum AS field_order,
     a.attname AS field_name,
+    (a.atttypid)::regtype AS field_type,
     (a.attnotnull = false) AS nullable,
     a.atthasdef AS has_default,
     COALESCE(attgenerated.generated, 'Unknown Value'::text) AS generated,
     COALESCE(attidentity.identity, 'Unknown Value'::text) AS identity
-   FROM ((((pg_attribute a
+   FROM (((pg_attribute a
      JOIN pg_class c ON ((a.attrelid = c.oid)))
-     JOIN pg_namespace s ON ((c.relnamespace = s.oid)))
      LEFT JOIN meta_lookup.attidentity USING (attidentity))
      LEFT JOIN meta_lookup.attgenerated USING (attgenerated))
   WHERE (a.attnum > 0)
-  ORDER BY s.nspname, c.relname, a.attnum;
+  ORDER BY ((c.relnamespace)::regnamespace)::text, c.relname, a.attnum;
 
 
 --
@@ -4388,16 +4384,15 @@ CREATE VIEW meta.fields AS
 --
 
 CREATE VIEW meta.index_fields AS
- SELECT ns.nspname AS schema_name,
+ SELECT (tbl.relnamespace)::regnamespace AS schema_name,
     tbl.relname AS relation,
     idx.relname AS index_name,
     array_agg(att.attname) AS fields
-   FROM ((((pg_index i
+   FROM (((pg_index i
      JOIN pg_class idx ON ((i.indexrelid = idx.oid)))
      JOIN pg_class tbl ON ((i.indrelid = tbl.oid)))
-     JOIN pg_namespace ns ON ((ns.oid = tbl.relnamespace)))
      JOIN pg_attribute att ON (((att.attrelid = tbl.oid) AND (att.attnum = ANY ((i.indkey)::smallint[])))))
-  GROUP BY ns.nspname, tbl.relname, idx.relname, idx.relkind;
+  GROUP BY (tbl.relnamespace)::regnamespace, tbl.relname, idx.relname, idx.relkind;
 
 
 --
@@ -4484,13 +4479,12 @@ CREATE VIEW meta.materialized_view_age AS
            FROM pg_settings
           WHERE (pg_settings.name = 'data_directory'::text)
         ), payload AS (
-         SELECT ns.nspname AS schema_name,
+         SELECT (c.relnamespace)::regnamespace AS schema_name,
             c.relname AS materialized_view,
-            (pg_stat_file((path.path || pg_relation_filepath(((((ns.nspname)::text || '.'::text) || (c.relname)::text))::regclass)))).modification AS refresh_time,
-            (now() - (pg_stat_file((path.path || pg_relation_filepath(((((ns.nspname)::text || '.'::text) || (c.relname)::text))::regclass)))).modification) AS age
+            (pg_stat_file((path.path || pg_relation_filepath((((((c.relnamespace)::regnamespace)::text || '.'::text) || (c.relname)::text))::regclass)))).modification AS refresh_time,
+            (now() - (pg_stat_file((path.path || pg_relation_filepath((((((c.relnamespace)::regnamespace)::text || '.'::text) || (c.relname)::text))::regclass)))).modification) AS age
            FROM path,
-            (pg_class c
-             JOIN pg_namespace ns ON ((c.relnamespace = ns.oid)))
+            pg_class c
           WHERE (c.relkind = 'm'::"char")
         )
  SELECT schema_name,
@@ -4533,7 +4527,7 @@ CREATE VIEW meta.primary_key AS
  SELECT NULLIF(c.conparentid, (0)::oid) AS parent_id,
     c.oid AS primary_key_id,
     c.conname AS primary_key_name,
-    s.nspname AS schema_name,
+    (c.connamespace)::regnamespace AS schema_name,
     cl.relname AS table_name,
     i.relname AS index_name,
     c.condeferred AS deferred,
@@ -4542,13 +4536,12 @@ CREATE VIEW meta.primary_key AS
     c.connoinherit AS inheritable,
     c.coninhcount AS ancestor_count,
     array_agg(a.attname ORDER BY a.attnum) AS primary_key_columns
-   FROM ((((pg_constraint c
-     JOIN pg_namespace s ON ((c.connamespace = s.oid)))
+   FROM (((pg_constraint c
      JOIN pg_class cl ON ((c.conrelid = cl.oid)))
      JOIN pg_class i ON ((c.conindid = i.oid)))
      JOIN pg_attribute a ON (((c.conrelid = a.attrelid) AND (a.attnum = ANY (c.conkey)))))
   WHERE (c.contype = 'p'::"char")
-  GROUP BY c.oid, s.nspname, cl.relname, i.relname, c.conname, c.condeferred, c.condeferrable, c.conislocal, c.connoinherit, c.coninhcount, c.conkey;
+  GROUP BY c.oid, (c.connamespace)::regnamespace, cl.relname, i.relname, c.conname, c.condeferred, c.condeferrable, c.conislocal, c.connoinherit, c.coninhcount, c.conkey;
 
 
 --
@@ -4558,7 +4551,7 @@ CREATE VIEW meta.primary_key AS
 CREATE VIEW meta.primary_keys AS
  WITH unnested AS (
          SELECT pg_class.oid AS attrelid,
-            pg_namespace.nspname,
+            (pg_class.relnamespace)::regnamespace AS nspname,
             pg_class.relname,
             unnest(pg_constraint.conkey) AS attnum
            FROM ((pg_constraint
@@ -4720,7 +4713,8 @@ CREATE TABLE meta_lookup.relkind (
 CREATE VIEW meta.relation_size AS
  WITH tbl_names AS (
          SELECT c.oid,
-            n.nspname AS table_schema,
+            (c.relnamespace)::regnamespace AS table_schema,
+            n.nspname,
             c.relname AS table_name,
             relkind.relation_type
            FROM ((pg_class c
@@ -4734,7 +4728,7 @@ CREATE VIEW meta.relation_size AS
     pg_size_pretty(pg_total_relation_size((oid)::regclass)) AS size
    FROM tbl_names t
   WHERE ((relation_type ~ 'Table|Materialized'::text) AND (relation_type !~ 'Toast'::text))
-  ORDER BY table_schema, table_name;
+  ORDER BY (table_schema)::text, table_name;
 
 
 --
@@ -4750,7 +4744,7 @@ CREATE VIEW meta.role_setting AS
          SELECT 0,
             '[All]'::name AS name
         ), rolz AS (
-         SELECT pg_roles.rolname AS role_name,
+         SELECT (pg_roles.oid)::regrole AS role_name,
             pg_roles.oid AS setrole
            FROM pg_roles
         ), exploded AS (
@@ -4802,7 +4796,7 @@ CREATE VIEW meta.schema_size AS
 
 CREATE VIEW meta.schemata AS
  SELECT nsp.oid AS schema_id,
-    nsp.nspname AS schema_name,
+    (nsp.oid)::regnamespace AS schema_name,
     u.usename AS owner,
     obj_description(nsp.oid) AS description
    FROM (pg_namespace nsp
@@ -4858,7 +4852,7 @@ CREATE VIEW meta.simple_primary_key AS
     table_name,
     primary_key_columns
    FROM meta.primary_key
-  WHERE (schema_name <> 'pg_catalog'::name)
+  WHERE ((schema_name)::text <> 'pg_catalog'::text)
   ORDER BY schema_name, table_name;
 
 
@@ -4890,16 +4884,53 @@ CREATE VIEW meta.table_size AS
 
 
 --
+-- Name: relpersistence; Type: TABLE; Schema: meta_lookup; Owner: -
+--
+
+CREATE TABLE meta_lookup.relpersistence (
+    relpersistence "char" NOT NULL,
+    relation_persistence text NOT NULL
+);
+
+
+--
+-- Name: tables_experiment; Type: VIEW; Schema: meta; Owner: -
+--
+
+CREATE VIEW meta.tables_experiment AS
+ WITH target AS (
+         SELECT rk.relation_type AS table_type,
+            (c.relnamespace)::regnamespace AS schema_name,
+            (c.oid)::regclass AS table_name,
+            pg_get_userbyid(c.relowner) AS owner,
+            c.relnatts AS field_count,
+            rp.relation_persistence AS persistence,
+            NULLIF(c.reltuples, ('-1'::integer)::double precision) AS row_estimate
+           FROM ((pg_class c
+             JOIN meta_lookup.relkind rk USING (relkind))
+             JOIN meta_lookup.relpersistence rp USING (relpersistence))
+          WHERE ((c.relkind)::text = ANY (ARRAY['r'::text, 'p'::text, 'f'::text, 't'::text]))
+        )
+ SELECT table_type,
+    schema_name,
+    table_name,
+    owner,
+    field_count,
+    persistence,
+    row_estimate
+   FROM target t;
+
+
+--
 -- Name: tables_simple; Type: VIEW; Schema: meta; Owner: -
 --
 
 CREATE VIEW meta.tables_simple AS
- SELECT n.nspname AS schema_name,
-    c.relname AS table_name,
+ SELECT (c.relnamespace)::regnamespace AS schema_name,
+    (c.oid)::regclass AS table_name,
     obj_description(c.oid) AS description,
     pg_get_userbyid(c.relowner) AS owner
-   FROM ((pg_class c
-     LEFT JOIN pg_namespace n ON ((n.oid = c.relnamespace)))
+   FROM (pg_class c
      LEFT JOIN pg_tablespace t ON ((t.oid = c.reltablespace)))
   WHERE (c.relkind = ANY (ARRAY['r'::"char", 'p'::"char"]));
 
@@ -5378,16 +5409,6 @@ CREATE TABLE meta_lookup.provolatile (
 
 
 --
--- Name: relpersistence; Type: TABLE; Schema: meta_lookup; Owner: -
---
-
-CREATE TABLE meta_lookup.relpersistence (
-    relpersistence "char" NOT NULL,
-    relation_persistence text NOT NULL
-);
-
-
---
 -- Name: relreplident; Type: TABLE; Schema: meta_lookup; Owner: -
 --
 
@@ -5511,7 +5532,7 @@ CREATE VIEW security.column_privilege AS
          SELECT 'PUBLIC'::name AS role_name,
             0 AS role_id
         ), cols AS (
-         SELECT rule_0.get_schema((pg_attribute.attrelid)::regclass) AS schema_name,
+         SELECT (rule_0.get_schema((pg_attribute.attrelid)::regclass))::regnamespace AS schema_name,
             rule_0.get_relation((pg_attribute.attrelid)::regclass) AS relation,
             pg_attribute.attname AS column_name,
             aclexplode(pg_attribute.attacl) AS vals
@@ -5616,7 +5637,7 @@ CREATE VIEW security.relation_privilege AS
          SELECT 'PUBLIC'::name AS role_name,
             0 AS role_id
         ), objects AS (
-         SELECT rule_0.get_schema((pg_class.oid)::regclass) AS schema_name,
+         SELECT (rule_0.get_schema((pg_class.oid)::regclass))::regnamespace AS schema_name,
             pg_class.relname AS relation,
             pg_class.relkind,
             aclexplode(pg_class.relacl) AS vals
@@ -5658,7 +5679,7 @@ CREATE VIEW security.role_membership AS
 
 CREATE VIEW security.roles AS
  SELECT oid AS role_id,
-    rolname AS role_name,
+    (oid)::regrole AS role_name,
     rolinherit AS role_inherits
    FROM pg_roles;
 
@@ -5709,32 +5730,32 @@ CREATE VIEW security.schema_privileges_old AS
 --
 
 CREATE VIEW security.system_privilege AS
- SELECT pg_roles.rolname AS role_name,
+ SELECT (pg_roles.oid)::regrole AS role_name,
     'BYPASS PERMISSIONS'::text AS system_privilege
    FROM pg_roles
   WHERE pg_roles.rolsuper
 UNION
- SELECT pg_roles.rolname AS role_name,
+ SELECT (pg_roles.oid)::regrole AS role_name,
     'CREATE ROLE'::text AS system_privilege
    FROM pg_roles
   WHERE pg_roles.rolcreaterole
 UNION
- SELECT pg_roles.rolname AS role_name,
+ SELECT (pg_roles.oid)::regrole AS role_name,
     'CREATE DATABASE'::text AS system_privilege
    FROM pg_roles
   WHERE pg_roles.rolcreatedb
 UNION
- SELECT pg_roles.rolname AS role_name,
+ SELECT (pg_roles.oid)::regrole AS role_name,
     'LOG IN'::text AS system_privilege
    FROM pg_roles
   WHERE pg_roles.rolcanlogin
 UNION
- SELECT pg_roles.rolname AS role_name,
+ SELECT (pg_roles.oid)::regrole AS role_name,
     'MANAGE REPLICATION'::text AS system_privilege
    FROM pg_roles
   WHERE pg_roles.rolreplication
 UNION
- SELECT pg_roles.rolname AS role_name,
+ SELECT (pg_roles.oid)::regrole AS role_name,
     'BYPASS ROW-LEVEL SECURITY'::text AS system_privilege
    FROM pg_roles
   WHERE pg_roles.rolbypassrls
@@ -6803,9 +6824,9 @@ r	Table
 --
 
 COPY meta_lookup.relpersistence (relpersistence, relation_persistence) FROM stdin;
-p	Permanent table/sequence
-u	Unlogged table/sequence
-t	Temporary table/sequence
+p	Permanent
+u	Unlogged
+t	Temporary
 \.
 
 
@@ -7002,11 +7023,19 @@ ALTER TABLE ONLY meta.view_keys
 
 
 --
--- Name: aggfinalmodify aggfinalmodify_aggregate_transition_state_modification_poli_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: amoppurpose access_method_operator_purpose_uniq; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+--
+
+ALTER TABLE ONLY meta_lookup.amoppurpose
+    ADD CONSTRAINT access_method_operator_purpose_uniq UNIQUE (access_method_operator_purpose);
+
+
+--
+-- Name: aggfinalmodify aggfinalmodify_lookup_field_uniq; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
 --
 
 ALTER TABLE ONLY meta_lookup.aggfinalmodify
-    ADD CONSTRAINT aggfinalmodify_aggregate_transition_state_modification_poli_key UNIQUE (aggregate_transition_state_modification_policy);
+    ADD CONSTRAINT aggfinalmodify_lookup_field_uniq UNIQUE (aggregate_transition_state_modification_policy);
 
 
 --
@@ -7034,14 +7063,6 @@ ALTER TABLE ONLY meta_lookup.aggkind
 
 
 --
--- Name: aggmfinalmodify aggmfinalmodify_aggregate_transition_state_modification_pol_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
---
-
-ALTER TABLE ONLY meta_lookup.aggmfinalmodify
-    ADD CONSTRAINT aggmfinalmodify_aggregate_transition_state_modification_pol_key UNIQUE (aggregate_transition_state_modification_policy);
-
-
---
 -- Name: aggmfinalmodify aggmfinalmodify_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
 --
 
@@ -7050,11 +7071,11 @@ ALTER TABLE ONLY meta_lookup.aggmfinalmodify
 
 
 --
--- Name: amoppurpose amoppurpose_access_method_operator_purpose_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+-- Name: aggmfinalmodify aggmfinalmodify_rows_uniq; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
 --
 
-ALTER TABLE ONLY meta_lookup.amoppurpose
-    ADD CONSTRAINT amoppurpose_access_method_operator_purpose_key UNIQUE (access_method_operator_purpose);
+ALTER TABLE ONLY meta_lookup.aggmfinalmodify
+    ADD CONSTRAINT aggmfinalmodify_rows_uniq UNIQUE (aggregate_transition_state_modification_policy);
 
 
 --
@@ -7674,19 +7695,19 @@ ALTER TABLE ONLY meta_lookup.subtwophasestate
 
 
 --
+-- Name: tgenabled trigger_enabled_condition_uniq; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
+--
+
+ALTER TABLE ONLY meta_lookup.tgenabled
+    ADD CONSTRAINT trigger_enabled_condition_uniq UNIQUE (trigger_enabled_condition);
+
+
+--
 -- Name: tgenabled trigger_enabled_conditions_pkey; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
 --
 
 ALTER TABLE ONLY meta_lookup.tgenabled
     ADD CONSTRAINT trigger_enabled_conditions_pkey PRIMARY KEY (tgenabled);
-
-
---
--- Name: tgenabled trigger_enabled_conditions_trigger_enabled_condition_key; Type: CONSTRAINT; Schema: meta_lookup; Owner: -
---
-
-ALTER TABLE ONLY meta_lookup.tgenabled
-    ADD CONSTRAINT trigger_enabled_conditions_trigger_enabled_condition_key UNIQUE (trigger_enabled_condition);
 
 
 --
@@ -7802,11 +7823,11 @@ ALTER TABLE ONLY update.refresh_sequence
 
 
 --
--- Name: refresh_sequence refresh_sequence_2_view_group_view_schema_view_name_key; Type: CONSTRAINT; Schema: update; Owner: -
+-- Name: refresh_sequence refresh_sequence_group_schema_name_uniq; Type: CONSTRAINT; Schema: update; Owner: -
 --
 
 ALTER TABLE ONLY update.refresh_sequence
-    ADD CONSTRAINT refresh_sequence_2_view_group_view_schema_view_name_key UNIQUE (view_group, view_schema, view_name);
+    ADD CONSTRAINT refresh_sequence_group_schema_name_uniq UNIQUE (view_group, view_schema, view_name);
 
 
 --
