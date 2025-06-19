@@ -4079,8 +4079,8 @@ CREATE TABLE meta_lookup.amtype (
 CREATE VIEW meta.access_method AS
  SELECT am.oid AS access_method_id,
     am.amname AS access_method_name,
-    nsp.nspname AS function_schema,
-    func.proname AS function_name,
+    (func.pronamespace)::regnamespace AS function_schema,
+    am.amhandler AS function_name,
     amtype.access_method_type
    FROM (((pg_am am
      JOIN meta_lookup.amtype USING (amtype))
@@ -4501,6 +4501,39 @@ CREATE VIEW meta.materialized_view_age AS
 
 CREATE VIEW meta.my_temp_schema AS
  SELECT pg_my_temp_schema() AS pg_my_temp_schema;
+
+
+--
+-- Name: oprkind; Type: TABLE; Schema: meta_lookup; Owner: -
+--
+
+CREATE TABLE meta_lookup.oprkind (
+    oprkind "char" NOT NULL,
+    operator_kind text NOT NULL
+);
+
+
+--
+-- Name: operator; Type: VIEW; Schema: meta; Owner: -
+--
+
+CREATE VIEW meta.operator AS
+ SELECT (pg_operator.oprnamespace)::regnamespace AS operator_schema,
+    (pg_operator.oid)::regoperator AS operator_name,
+    (pg_operator.oprowner)::regrole AS owner,
+    oprkind.operator_kind,
+    pg_operator.oprcanmerge AS can_merge,
+    pg_operator.oprcanhash AS can_hash,
+    (NULLIF(pg_operator.oprleft, (0)::oid))::regtype AS left_type,
+    (pg_operator.oprright)::regtype AS right_type,
+    (NULLIF(pg_operator.oprresult, (0)::oid))::regtype AS result_type,
+    (NULLIF(pg_operator.oprcom, (0)::oid))::regoperator AS commutator_type,
+    (NULLIF(pg_operator.oprnegate, (0)::oid))::regoperator AS negator_type,
+    (NULLIF((pg_operator.oprcode)::oid, (0)::oid))::regproc AS operator_function,
+    (NULLIF((pg_operator.oprrest)::oid, (0)::oid))::regproc AS restrict_estimator,
+    (NULLIF((pg_operator.oprjoin)::oid, (0)::oid))::regproc AS join_estimator
+   FROM (pg_operator
+     JOIN meta_lookup.oprkind USING (oprkind));
 
 
 --
@@ -5325,16 +5358,6 @@ CREATE TABLE meta_lookup.lock_mode (
 
 CREATE TABLE meta_lookup.message_level (
     message_level text NOT NULL
-);
-
-
---
--- Name: oprkind; Type: TABLE; Schema: meta_lookup; Owner: -
---
-
-CREATE TABLE meta_lookup.oprkind (
-    oprkind "char" NOT NULL,
-    operator_kind text NOT NULL
 );
 
 
