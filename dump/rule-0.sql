@@ -45,6 +45,13 @@ COMMENT ON SCHEMA meta_lookup IS 'Lookup tables to resolve codes and IDs in Post
 
 
 --
+-- Name: my; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA my;
+
+
+--
 -- Name: rule_0; Type: SCHEMA; Schema: -; Owner: -
 --
 
@@ -4542,14 +4549,12 @@ CREATE VIEW meta.operator AS
 
 CREATE VIEW meta.operator_family AS
  SELECT o.oid AS operator_family_id,
-    s.nspname AS operator_family_schema,
+    (o.opfnamespace)::regnamespace AS operator_family_schema,
     o.opfname AS operator_family,
     a.amname AS access_method,
-    r.rolname AS owner
-   FROM (((pg_opfamily o
-     JOIN pg_namespace s ON ((o.opfnamespace = s.oid)))
-     JOIN pg_am a ON ((o.opfmethod = a.oid)))
-     JOIN pg_roles r ON ((o.opfowner = r.oid)));
+    (o.opfowner)::regrole AS owner
+   FROM (pg_opfamily o
+     JOIN pg_am a ON ((o.opfmethod = a.oid)));
 
 
 --
@@ -4838,17 +4843,6 @@ CREATE VIEW meta.schemata AS
 
 
 --
--- Name: search_path; Type: VIEW; Schema: meta; Owner: -
---
-
-CREATE VIEW meta.search_path AS
- SELECT ordinality,
-    schema_name
-   FROM string_to_table(( SELECT current_setting('search_path'::text) AS current_setting), ', '::text) WITH ORDINALITY x(schema_name, ordinality)
-  WHERE (schema_name <> ''::text);
-
-
---
 -- Name: session_settings; Type: VIEW; Schema: meta; Owner: -
 --
 
@@ -5001,6 +4995,33 @@ COMMENT ON COLUMN meta.tables_simple.description IS 'Description of the table';
 --
 
 COMMENT ON COLUMN meta.tables_simple.owner IS 'The user that owns the table';
+
+
+--
+-- Name: tablespace; Type: VIEW; Schema: meta; Owner: -
+--
+
+CREATE VIEW meta.tablespace AS
+ SELECT oid AS tablespace_id,
+    spcname AS tablespace_name,
+    (spcowner)::regrole AS owner
+   FROM pg_tablespace;
+
+
+--
+-- Name: tablespace_options; Type: VIEW; Schema: meta; Owner: -
+--
+
+CREATE VIEW meta.tablespace_options AS
+ WITH split AS (
+         SELECT pg_tablespace.spcname AS tablespace_name,
+            unnest(pg_tablespace.spcoptions) AS option
+           FROM pg_tablespace
+        )
+ SELECT tablespace_name,
+    split_part(option, '='::text, 1) AS option,
+    split_part(option, '='::text, 2) AS value
+   FROM split;
 
 
 --
@@ -5543,6 +5564,59 @@ CREATE TABLE meta_lookup.typtype (
 
 
 --
+-- Name: settings; Type: VIEW; Schema: my; Owner: -
+--
+
+CREATE VIEW my.settings AS
+ SELECT name,
+    setting,
+    unit,
+    category,
+    short_desc,
+    extra_desc,
+    context,
+    vartype,
+    source,
+    min_val,
+    max_val,
+    enumvals,
+    boot_val,
+    reset_val,
+    sourcefile,
+    sourceline,
+    pending_restart
+   FROM pg_settings
+  WHERE (context = 'user'::text);
+
+
+--
+-- Name: new_session_search_path; Type: VIEW; Schema: my; Owner: -
+--
+
+CREATE VIEW my.new_session_search_path AS
+ WITH rval AS (
+         SELECT settings.reset_val
+           FROM my.settings
+          WHERE (settings.name = 'search_path'::text)
+        )
+ SELECT ordinality,
+    schema_name
+   FROM string_to_table(( SELECT rval.reset_val
+           FROM rval), ', '::text) WITH ORDINALITY x(schema_name, ordinality);
+
+
+--
+-- Name: search_path; Type: VIEW; Schema: my; Owner: -
+--
+
+CREATE VIEW my.search_path AS
+ SELECT ordinality,
+    schema_name
+   FROM string_to_table(( SELECT current_setting('search_path'::text) AS current_setting), ', '::text) WITH ORDINALITY x(schema_name, ordinality)
+  WHERE (schema_name <> ''::text);
+
+
+--
 -- Name: column_privilege; Type: VIEW; Schema: security; Owner: -
 --
 
@@ -5818,27 +5892,27 @@ CREATE VIEW security.users AS
 --
 
 CREATE TABLE security_lookup.privilege_type (
-    privilege_type name NOT NULL,
-    privilege_code character(1)
+    privilege_code character(1) CONSTRAINT pgdump_throwaway_notnull_0 NOT NULL NO INHERIT,
+    privilege_type text NOT NULL
 );
 
 
 --
--- Name: system_privilege_type; Type: TABLE; Schema: security_lookup; Owner: -
+-- Name: securable_object_type; Type: TABLE; Schema: security_lookup; Owner: -
 --
 
-CREATE TABLE security_lookup.system_privilege_type (
-    system_privilege_type text NOT NULL
+CREATE TABLE security_lookup.securable_object_type (
+    object_type text CONSTRAINT pgdump_throwaway_notnull_0 NOT NULL NO INHERIT
 );
 
 
 --
--- Name: valid_object_privileges; Type: TABLE; Schema: security_lookup; Owner: -
+-- Name: valid_object_privilege; Type: TABLE; Schema: security_lookup; Owner: -
 --
 
-CREATE TABLE security_lookup.valid_object_privileges (
-    object_type name NOT NULL,
-    privilege_type name NOT NULL
+CREATE TABLE security_lookup.valid_object_privilege (
+    object_type text NOT NULL,
+    privilege_type text NOT NULL
 );
 
 
@@ -6979,23 +7053,91 @@ m	Multirange
 -- Data for Name: privilege_type; Type: TABLE DATA; Schema: security_lookup; Owner: -
 --
 
-COPY security_lookup.privilege_type (privilege_type, privilege_code) FROM stdin;
+COPY security_lookup.privilege_type (privilege_code, privilege_type) FROM stdin;
+r	SELECT
+a	INSERT
+w	UPDATE
+d	DELETE
+D	TRUNCATE
+x	REFERENCES
+t	TRIGGER
+C	CREATE
+c	CONNECT
+T	TEMPORARY
+X	EXECUTE
+U	USAGE
+s	SET
+A	ALTER SYSTEM
+m	MAINTAIN
 \.
 
 
 --
--- Data for Name: system_privilege_type; Type: TABLE DATA; Schema: security_lookup; Owner: -
+-- Data for Name: securable_object_type; Type: TABLE DATA; Schema: security_lookup; Owner: -
 --
 
-COPY security_lookup.system_privilege_type (system_privilege_type) FROM stdin;
+COPY security_lookup.securable_object_type (object_type) FROM stdin;
+AGGREGATE
+COLUMN
+DATABASE
+DOMAIN
+FOREIGN DATA WRAPPER
+FOREIGN SERVER
+FUNCTION
+LANGUAGE
+LARGE OBJECT
+MATERIALIZED VIEW
+PARAMETER
+PROCEDURE
+PUBLICATION
+ROLE
+SCHEMA
+SEQUENCE
+SUBSCRIPTION
+TABLE
+TABLESPACE
+TYPE
+VIEW
 \.
 
 
 --
--- Data for Name: valid_object_privileges; Type: TABLE DATA; Schema: security_lookup; Owner: -
+-- Data for Name: valid_object_privilege; Type: TABLE DATA; Schema: security_lookup; Owner: -
 --
 
-COPY security_lookup.valid_object_privileges (object_type, privilege_type) FROM stdin;
+COPY security_lookup.valid_object_privilege (object_type, privilege_type) FROM stdin;
+COLUMN	INSERT
+COLUMN	REFERENCES
+COLUMN	SELECT
+COLUMN	UPDATE
+DATABASE	CONNECT
+DATABASE	CREATE
+DATABASE	TEMPORARY
+DOMAIN	USAGE
+FOREIGN DATA WRAPPER	USAGE
+FOREIGN SERVER	USAGE
+FUNCTION	EXECUTE
+LANGUAGE	USAGE
+LARGE OBJECT	SELECT
+LARGE OBJECT	UPDATE
+PARAMETER	ALTER SYSTEM
+PARAMETER	SET
+PROCEDURE	EXECUTE
+SCHEMA	CREATE
+SCHEMA	USAGE
+SEQUENCE	SELECT
+SEQUENCE	UPDATE
+SEQUENCE	USAGE
+TABLE	DELETE
+TABLE	INSERT
+TABLE	MAINTAIN
+TABLE	REFERENCES
+TABLE	SELECT
+TABLE	TRIGGER
+TABLE	TRUNCATE
+TABLE	UPDATE
+TABLESPACE	CREATE
+TYPE	USAGE
 \.
 
 
@@ -7802,31 +7944,33 @@ ALTER TABLE ONLY meta_lookup.typtype
 --
 
 ALTER TABLE ONLY security_lookup.privilege_type
-    ADD CONSTRAINT privilege_type_pkey PRIMARY KEY (privilege_type);
+    ADD CONSTRAINT privilege_type_pkey PRIMARY KEY (privilege_code);
 
+ALTER TABLE ONLY security_lookup.privilege_type DROP CONSTRAINT pgdump_throwaway_notnull_0;
 
 --
--- Name: privilege_type privilege_type_privilege_code_key; Type: CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: privilege_type privilege_type_privilege_type_key; Type: CONSTRAINT; Schema: security_lookup; Owner: -
 --
 
 ALTER TABLE ONLY security_lookup.privilege_type
-    ADD CONSTRAINT privilege_type_privilege_code_key UNIQUE (privilege_code);
+    ADD CONSTRAINT privilege_type_privilege_type_key UNIQUE (privilege_type);
 
 
 --
--- Name: system_privilege_type system_privilege_type_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: securable_object_type securable_object_type_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: -
 --
 
-ALTER TABLE ONLY security_lookup.system_privilege_type
-    ADD CONSTRAINT system_privilege_type_pkey PRIMARY KEY (system_privilege_type);
+ALTER TABLE ONLY security_lookup.securable_object_type
+    ADD CONSTRAINT securable_object_type_pkey PRIMARY KEY (object_type);
 
+ALTER TABLE ONLY security_lookup.securable_object_type DROP CONSTRAINT pgdump_throwaway_notnull_0;
 
 --
--- Name: valid_object_privileges valid_object_privileges_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: valid_object_privilege valid_object_privilege_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: -
 --
 
-ALTER TABLE ONLY security_lookup.valid_object_privileges
-    ADD CONSTRAINT valid_object_privileges_pkey PRIMARY KEY (object_type, privilege_type);
+ALTER TABLE ONLY security_lookup.valid_object_privilege
+    ADD CONSTRAINT valid_object_privilege_pkey PRIMARY KEY (object_type, privilege_type);
 
 
 --
@@ -7870,27 +8014,6 @@ ALTER TABLE ONLY update.copy
 
 
 --
--- Name: search_path search_path_delete; Type: TRIGGER; Schema: meta; Owner: -
---
-
-CREATE TRIGGER search_path_delete INSTEAD OF DELETE ON meta.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.delete_from_search_path_trigger();
-
-
---
--- Name: search_path search_path_insert; Type: TRIGGER; Schema: meta; Owner: -
---
-
-CREATE TRIGGER search_path_insert INSTEAD OF INSERT ON meta.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.push_to_search_path_trigger();
-
-
---
--- Name: search_path search_path_update; Type: TRIGGER; Schema: meta; Owner: -
---
-
-CREATE TRIGGER search_path_update INSTEAD OF UPDATE ON meta.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.update_search_path_trigger();
-
-
---
 -- Name: view_key_fields trigger_check_field_exists; Type: TRIGGER; Schema: meta; Owner: -
 --
 
@@ -7902,6 +8025,27 @@ CREATE TRIGGER trigger_check_field_exists BEFORE INSERT OR UPDATE ON meta.view_k
 --
 
 CREATE TRIGGER trigger_check_named_view_is_a_view BEFORE INSERT OR UPDATE ON meta.view_keys FOR EACH ROW EXECUTE FUNCTION rule_0.view_name_must_be_a_view_tg();
+
+
+--
+-- Name: search_path search_path_delete; Type: TRIGGER; Schema: my; Owner: -
+--
+
+CREATE TRIGGER search_path_delete INSTEAD OF DELETE ON my.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.delete_from_search_path_trigger();
+
+
+--
+-- Name: search_path search_path_insert; Type: TRIGGER; Schema: my; Owner: -
+--
+
+CREATE TRIGGER search_path_insert INSTEAD OF INSERT ON my.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.push_to_search_path_trigger();
+
+
+--
+-- Name: search_path search_path_update; Type: TRIGGER; Schema: my; Owner: -
+--
+
+CREATE TRIGGER search_path_update INSTEAD OF UPDATE ON my.search_path FOR EACH ROW EXECUTE FUNCTION rule_0.update_search_path_trigger();
 
 
 --
@@ -7945,11 +8089,19 @@ ALTER TABLE ONLY meta_lookup.lock_mode
 
 
 --
--- Name: valid_object_privileges valid_object_privileges_privilege_type_fkey; Type: FK CONSTRAINT; Schema: security_lookup; Owner: -
+-- Name: valid_object_privilege valid_object_privilege_object_type_fkey; Type: FK CONSTRAINT; Schema: security_lookup; Owner: -
 --
 
-ALTER TABLE ONLY security_lookup.valid_object_privileges
-    ADD CONSTRAINT valid_object_privileges_privilege_type_fkey FOREIGN KEY (privilege_type) REFERENCES security_lookup.privilege_type(privilege_type);
+ALTER TABLE ONLY security_lookup.valid_object_privilege
+    ADD CONSTRAINT valid_object_privilege_object_type_fkey FOREIGN KEY (object_type) REFERENCES security_lookup.securable_object_type(object_type);
+
+
+--
+-- Name: valid_object_privilege valid_object_privilege_privilege_type_fkey; Type: FK CONSTRAINT; Schema: security_lookup; Owner: -
+--
+
+ALTER TABLE ONLY security_lookup.valid_object_privilege
+    ADD CONSTRAINT valid_object_privilege_privilege_type_fkey FOREIGN KEY (privilege_type) REFERENCES security_lookup.privilege_type(privilege_type);
 
 
 --

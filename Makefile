@@ -1,5 +1,5 @@
-SCHEMATA = rule_0 security security_lookup meta meta_lookup update
-TARGETS  = "rule_0|security|security_lookup|meta|meta_lookup|update"
+SCHEMATA = rule_0 security security_lookup meta meta_lookup update my
+TARGETS  = "rule_0|security|security_lookup|meta|meta_lookup|update|my"
 SQL=dump/rule-0.sql
 VER="0.1"
 
