@@ -57,14 +57,17 @@ one is not supplied, is required for safety.  This may be relaxed when the
 project matures.
 
 Installing Rule 0 to a database will create the following schemata:
-* rule_0
 * meta
 * meta_lookup
+* my
+* rule_0
 * security
 * security_lookup
+* setting_lookup
+* statistics
 * update
 
-Well over 100 relations  populate these schemata, along with many functions.
+Over 120 relations populate these schemata, along with many functions.
 These will be better documented in subsequent releases of the project, but
 many useful tables and functions are fairly obvious to one casually browsing
 the system.
