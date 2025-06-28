@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17devel
--- Dumped by pg_dump version 17devel
+-- Dumped from database version 18beta1
+-- Dumped by pg_dump version 18beta1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -632,7 +633,6 @@ a materialzied view in the destination schema.';
 
 	EXECUTE( 'CREATE SCHEMA IF NOT EXISTS ' || destination_schema  );
 
-	-- Create second version for create or replace mat views
 
 	FOR
 		source_view
@@ -804,7 +804,6 @@ BEGIN
 	RAISE NOTICE '=====================';
 	RAISE NOTICE '%',  json_typeof(jsn);
 	RAISE NOTICE '=====================';
-	-- RAISE NOTICE '%', jsn->0->'Plan'->'Node Type';
 
 	return '';
 
@@ -1013,7 +1012,6 @@ BEGIN
 
 	IF      (input_name LIKE '%.%.%')
 	THEN
-		RAISE EXCEPTION 'Input name should not contain more than one period'; -- Improve message
 	ELSIF (input_name LIKE '%.%')
 	THEN
 		schema_name := SPLIT_PART(input_name, '.', 1);
@@ -1222,7 +1220,6 @@ DECLARE
 BEGIN
 
 
----------------- BEGIN TEMPLATE --------------
 	template := $level_1$
 
 CREATE OR REPLACE FUNCTION rule_0.to_%s(
@@ -1244,7 +1241,6 @@ END
 $soft_cast$;
 
 $level_1$;
-----------------  END TEMPLATE --------------
 
 	type_count := 0;
 
@@ -1263,8 +1259,6 @@ $level_1$;
 
 	LOOP
 		qual_type = type_schema || '.' || type_name;
-		--RAISE NOTICE '%', FORMAT(template, type_name, qual_type, qual_type);
-		--RAISE NOTICE '-----------------------------------';
 		EXECUTE FORMAT(template, type_name, qual_type, qual_type);
 		type_count = type_count + 1;
 	END LOOP;
@@ -1566,7 +1560,6 @@ $_$;
 CREATE FUNCTION rule_0.get_schema(regnamespace) RETURNS regnamespace
     LANGUAGE sql
     AS $_$
--- Schemata don't belong to schemata?  How to handle this?  I say it's idempotent.
 	SELECT $1;
 $_$;
 
@@ -1622,7 +1615,6 @@ $_$;
 CREATE FUNCTION rule_0.get_schema(regrole) RETURNS regnamespace
     LANGUAGE sql
     AS $$
--- Roles don't belong to schemata.  Consider raising a warning on this.
 	SELECT NULL::REGNAMESPACE;
 $$;
 
@@ -1678,17 +1670,12 @@ DECLARE
 	temp_filename text := '/tmp/unzipped_file.txt';
 	text_data text;
 BEGIN
-	-- Extract the ZIP file to a temporary file
-	-- EXECUTE format('unzip -p %s > %s', zip_filename, temp_filename);
 	EXECUTE format('touch %s', '/tmp/foobar');
 
-	-- Read the unzipped content from the temporary file
 	text_data := pg_read_binary_file(temp_filename);
 
-	-- Insert the unzipped text data into the table
 	INSERT INTO unzipped_text (text_content) VALUES (text_data);
 
-	-- Clean up the temporary file
 	EXECUTE format('rm %s', temp_filename);
 END;
 $$;
@@ -2019,7 +2006,6 @@ BEGIN
 		RETURN NEXT;
 	END LOOP;
 
--- PREVIOUS OKAY STATE
 
 END;
 $$;
@@ -2162,7 +2148,6 @@ CREATE FUNCTION rule_0.random_string() RETURNS text
     AS $$
 DECLARE
 	alphabet TEXT := 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-	random_string_length INTEGER := 5 + floor(random() * 6); -- Random length between 5 and 10
 	random_string TEXT := '';
 	i INTEGER;
 BEGIN
@@ -4227,6 +4212,43 @@ CREATE VIEW meta.composite_type_field AS
 
 
 --
+-- Name: datlocprovider; Type: TABLE; Schema: meta_lookup; Owner: -
+--
+
+CREATE TABLE meta_lookup.datlocprovider (
+    datlocprovider "char" NOT NULL,
+    locale_provider text NOT NULL
+);
+
+
+--
+-- Name: database; Type: VIEW; Schema: meta; Owner: -
+--
+
+CREATE VIEW meta.database AS
+ WITH pg_tsp AS (
+         SELECT pg_tablespace.oid AS dattablespace,
+            pg_tablespace.spcname AS tablespace_name
+           FROM pg_tablespace
+        )
+ SELECT pg_database.oid AS database_id,
+    pg_database.datname AS database_name,
+    (pg_database.datdba)::regrole AS owner,
+    pg_encoding_to_char(pg_database.encoding) AS encoding,
+    datlocprovider.locale_provider,
+    pg_database.datistemplate AS is_template,
+    pg_tsp.tablespace_name AS default_tablespace,
+    pg_database.datcollate AS lc_collate,
+    pg_database.datctype AS lc_ctype,
+    pg_database.datlocale AS collation_provider_locale,
+    pg_database.daticurules AS icu_collation_rules,
+    pg_database.datcollversion AS collation_version
+   FROM ((pg_database
+     JOIN meta_lookup.datlocprovider USING (datlocprovider))
+     JOIN pg_tsp USING (dattablespace));
+
+
+--
 -- Name: domains; Type: VIEW; Schema: meta; Owner: -
 --
 
@@ -5283,16 +5305,6 @@ CREATE TABLE meta_lookup.contype (
 
 
 --
--- Name: datlocprovider; Type: TABLE; Schema: meta_lookup; Owner: -
---
-
-CREATE TABLE meta_lookup.datlocprovider (
-    datlocprovider "char" NOT NULL,
-    locale_provider text NOT NULL
-);
-
-
---
 -- Name: defaclobjtype; Type: TABLE; Schema: meta_lookup; Owner: -
 --
 
@@ -5892,7 +5904,7 @@ CREATE VIEW security.users AS
 --
 
 CREATE TABLE security_lookup.privilege_type (
-    privilege_code character(1) CONSTRAINT pgdump_throwaway_notnull_0 NOT NULL NO INHERIT,
+    privilege_code character(1) NOT NULL,
     privilege_type text NOT NULL
 );
 
@@ -5902,7 +5914,7 @@ CREATE TABLE security_lookup.privilege_type (
 --
 
 CREATE TABLE security_lookup.securable_object_type (
-    object_type text CONSTRAINT pgdump_throwaway_notnull_0 NOT NULL NO INHERIT
+    object_type text NOT NULL
 );
 
 
@@ -6318,6 +6330,7 @@ x	Exclusion
 --
 
 COPY meta_lookup.datlocprovider (datlocprovider, locale_provider) FROM stdin;
+b	builtin
 c	libc
 i	icu
 \.
@@ -7946,7 +7959,6 @@ ALTER TABLE ONLY meta_lookup.typtype
 ALTER TABLE ONLY security_lookup.privilege_type
     ADD CONSTRAINT privilege_type_pkey PRIMARY KEY (privilege_code);
 
-ALTER TABLE ONLY security_lookup.privilege_type DROP CONSTRAINT pgdump_throwaway_notnull_0;
 
 --
 -- Name: privilege_type privilege_type_privilege_type_key; Type: CONSTRAINT; Schema: security_lookup; Owner: -
@@ -7963,7 +7975,6 @@ ALTER TABLE ONLY security_lookup.privilege_type
 ALTER TABLE ONLY security_lookup.securable_object_type
     ADD CONSTRAINT securable_object_type_pkey PRIMARY KEY (object_type);
 
-ALTER TABLE ONLY security_lookup.securable_object_type DROP CONSTRAINT pgdump_throwaway_notnull_0;
 
 --
 -- Name: valid_object_privilege valid_object_privilege_pkey; Type: CONSTRAINT; Schema: security_lookup; Owner: -
