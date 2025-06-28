@@ -33,6 +33,8 @@ NATURAL JOIN
 	meta_lookup.datlocprovider
 NATURAL JOIN
 	pg_tsp
+ORDER BY
+	database_name
 ;
 
 /*

@@ -4222,10 +4222,10 @@ CREATE TABLE meta_lookup.datlocprovider (
 
 
 --
--- Name: database; Type: VIEW; Schema: meta; Owner: -
+-- Name: databases; Type: VIEW; Schema: meta; Owner: -
 --
 
-CREATE VIEW meta.database AS
+CREATE VIEW meta.databases AS
  WITH pg_tsp AS (
          SELECT pg_tablespace.oid AS dattablespace,
             pg_tablespace.spcname AS tablespace_name
@@ -4245,7 +4245,8 @@ CREATE VIEW meta.database AS
     pg_database.datcollversion AS collation_version
    FROM ((pg_database
      JOIN meta_lookup.datlocprovider USING (datlocprovider))
-     JOIN pg_tsp USING (dattablespace));
+     JOIN pg_tsp USING (dattablespace))
+  ORDER BY pg_database.datname;
 
 
 --
