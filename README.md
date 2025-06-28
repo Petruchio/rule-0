@@ -189,7 +189,7 @@ in the meta_lookup and security_lookup schemata.  For instance:
 
 ```
 rule_0=# select * from meta_lookup.relkind ;
- relkind |   relation_type   
+ relkind |   relation_type
 ---------+-------------------
  i       | Index
  S       | Sequence
@@ -204,7 +204,7 @@ rule_0=# select * from meta_lookup.relkind ;
 (10 rows)
 ```
 
-There are presently almost 40 tables full of this stuff.  Because you
+There are presently over 50 tables full of this stuff.  Because you
 know... this is *data*.  PostgreSQL is a database.  It's nice having
 the data in the database, rather than spread out in web pages.
 
@@ -370,7 +370,7 @@ With Rule 0, you can say:
 
 ```
 rule_0=# SELECT * FROM security.users ;
- user_id | user_name | password | password_expiry | connection_limit 
+ user_id | user_name | password | password_expiry | connection_limit
 ---------+-----------+----------+-----------------+------------------
       10 | postgres  | ******** | ∅               |                ∅
   16,384 | ray       | ******** | ∅               |                ∅
@@ -385,7 +385,7 @@ roles view, however:
 
 ```
 rule_0=# SELECT * FROM security.roles;
- role_id |          role_name          | role_inherits 
+ role_id |          role_name          | role_inherits
 ---------+-----------------------------+---------------
       10 | postgres                    | t
    6,171 | pg_database_owner           | t
